@@ -96,7 +96,7 @@
               <label for="">Tester</label>
               <br>
               <select name="testerBugStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="">Please select one option</option>
+                <option value="" disabled selected>Please select one option</option>
                 <option [disabled]="item.assignee != 'tester' " value="reopen">Reopened</option>
                 <option [disabled]="item.assignee != 'tester' " value="verified">Verified</option>
               </select>
@@ -108,7 +108,7 @@
               <label for="">Client</label>
               <br>
               <select name="clientStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="">Please select an option.</option>
+                <option value="" disabled selected>Please select an option.</option>
                 <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Closed</option>
                 <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Reopened</option>
               </select>
