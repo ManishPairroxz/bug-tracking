@@ -1,3 +1,13 @@
 .error  {
     color: red;
 }
+
+.custom-badge   {
+    width: 100%;
+    padding: 12px;
+}
+
+.info-button {
+    background: none;
+    border: none;
+}

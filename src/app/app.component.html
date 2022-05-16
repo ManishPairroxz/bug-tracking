@@ -14,9 +14,7 @@
     </thead>
     <tbody>
 
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add +</button>
-
-
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add</button>
 
       <!-- 1 row -->
       <ng-container *ngIf="result">
@@ -24,115 +22,69 @@
 
           <!-- Details -->
           <tr>
-            <th scope="row">{{item.title}}</th>
+            <th scope="row">
+              <ngx-edit-inline
+              [value]="item.title.slice(0,50)"
+              [type]="'text'"
+              [saveOption]="'onedit'"
+              [debounceTime]="500"
+              [selectText]="true"
+              (onValueChanged)="changedValue($event,item)"
+              ></ngx-edit-inline>
+            </th>
             <td>{{item.assignee}}</td>
 
             <!-- Status -->
             <td *ngIf="item.status == 'new'"><span
-                [ngClass]="item.status == 'new' ? 'badge bg-secondary' : ''">New</span></td>
+                [ngClass]="item.status == 'new' ? 'badge bg-secondary custom-badge' : ''">New</span></td>
             <td *ngIf="item.status == 'assinged'"><span
-                [ngClass]="item.status == 'assinged' ? 'badge bg-primary' : ''">Assigned</span></td>
+                [ngClass]="item.status == 'assinged' ? 'badge bg-primary custom-badge' : ''">Assigned</span></td>
             <td *ngIf="item.status == 'fixed'"><span
-                [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark' : ''">Fixed</span></td>
+                [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark custom-badge' : ''">Fixed</span></td>
 
             <td *ngIf="item.status == 'reopen'"><span
-                [ngClass]="item.status == 'reopen' ? 'badge bg-danger' : ''">Reopen</span></td>
+                [ngClass]="item.status == 'reopen' ? 'badge bg-danger custom-badge' : ''">Reopen</span></td>
             <td *ngIf="item.status == 'verified'">
-              <span [ngClass]="item.status == 'verified' ? 'badge bg-dark' : '' ">Verified</span>
+              <span [ngClass]="item.status == 'verified' ? 'badge bg-dark custom-badge' : '' ">Verified</span>
             </td>
             <td *ngIf="item.status == 'closed'"><span
-                [ngClass]="item.status == 'closed' ? 'badge bg-success' : ''">Closed</span></td>
+                [ngClass]="item.status == 'closed' ? 'badge bg-success  custom-badge' : ''">Closed</span></td>
             <!-- Status -->
 
             <!-- Priority -->
             <td *ngIf="item.priority == 'low'"><span
-                [ngClass]="item.priority == 'low' ? 'badge bg-secondary' : ''">Low</span></td>
+                [ngClass]="item.priority == 'low' ? 'badge bg-secondary custom-badge  w-100' : ''">Low</span></td>
             <td *ngIf="item.priority == 'medium'"><span
-                [ngClass]="item.priority == 'medium' ? 'badge bg-primary' : ''">Medium</span></td>
+                [ngClass]="item.priority == 'medium' ? 'badge bg-primary  custom-badge  w-100' : ''">Medium</span></td>
             <td *ngIf="item.priority == 'high'"><span
-                [ngClass]="item.priority == 'high' ? 'badge bg-danger' : ''">High</span></td>
+                [ngClass]="item.priority == 'high' ? 'badge bg-danger custom-badge w-100' : ''">High</span></td>
+
+            <td>
+              <select (change)="updateStatus(item, $event)">
+                <optgroup label="___Developer____">
+                  <option value="" disabled selected>Please select one option</option>
+                  <option value="assinged" [disabled]="item.assignee != 'developer' ">Assigned</option>
+                  <option value="fixed" [disabled]="item.assignee != 'developer' ">Fixed</option>
+                </optgroup>
+                <optgroup label="____Tester_____">
+                  <option [disabled]="item.assignee != 'tester' " value="reopen">Reopened</option>
+                  <option [disabled]="item.assignee != 'tester' " value="verified">Verified</option>
+                </optgroup>
+                <optgroup label="___Client____">
+                  <option value="" disabled selected>Please select an option.</option>
+                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Closed
+                  </option>
+                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Reopened
+                  </option>
+                </optgroup>
+              </select>
+            </td>
 
           </tr>
           <!-- Priority -->
-
-
-          <!-- Details -->
-
-          <!-- Options to edit -->
-          <tr class="border">
-            <!-- <th>
-              <select name="developer" id="developer">
-                <option value="">Develoepr stuff</option>
-              </select>
-            </th>
-
-            <th>
-              <select name="tester" id="tester">
-                <option value="">Tester stuff</option>
-              </select>
-            </th>
-
-            <th>
-              <select name="client" id="client">
-                <option value="">Client stuff</option>
-              </select>
-            </th> -->
-
-            <!-- Bug status -->
-
-            <!-- Developer -->
-            <th>
-              <label for="">Developer</label>
-              <br>
-              <select name="developerBugStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="assinged"  [disabled]="item.assignee != 'developer' ">Assigned</option>
-                <option value="fixed" [disabled]="item.assignee != 'developer' ">Fixed</option>
-              </select>
-            </th>
-            <!-- Developer -->
-
-            <!-- Tester -->
-            <th>
-              <label for="">Tester</label>
-              <br>
-              <select name="testerBugStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="" disabled selected>Please select one option</option>
-                <option [disabled]="item.assignee != 'tester' " value="reopen">Reopened</option>
-                <option [disabled]="item.assignee != 'tester' " value="verified">Verified</option>
-              </select>
-            </th>
-            <!-- Tester -->
-
-            <!-- Client -->
-            <th>
-              <label for="">Client</label>
-              <br>
-              <select name="clientStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="" disabled selected>Please select an option.</option>
-                <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Closed</option>
-                <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Reopened</option>
-              </select>
-
-            </th>
-            <!-- Client -->
-            <!-- <th>
-              <select name="bugStatus" id="" (change)="updateStatus(item, $event)">
-                <option value="open">Open</option>
-                <option value="inProgress">In Progress</option>
-                <option value="bugPersists">Bug Persists</option>
-                
-                <option value="done">Done</option>
-              </select>
-            </th> -->
-            <!-- Bug status -->
-
-          </tr>
-          <!-- Options to edit -->
         </ng-container>
 
       </ng-container>
-
-
       <!-- 1 row -->
     </tbody>
   </table>
@@ -143,16 +95,16 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add bug</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add a bug</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="addBugForm">
+          <form [formGroup]="addBugForm" id="exampleBugForm">
             <div class="mb-3">
               <label for="">Title</label>
               <input type="text" class="form-control" id="exampleInputTitle" aria-describedby="titleJelp"
                 placeholder="Title" formControlName="title" />
-
+                <!-- {{addBugForm?.controls['title']?.errors['required']}} -->
               <div class="error" *ngIf="addBugForm.controls['title'].touched && addBugForm.controls['title'].errors">
                 <div *ngIf="addBugForm.controls['title'].errors['required']">
                   Title field is required.
@@ -180,9 +132,9 @@
             <div class="mb-3">
               <label for="">Priority</label>
               <select id="prioritySelect" class="form-select" aria-placeholder="Priority" formControlName="priority">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
                 <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
               </select>
 
               <div class="error"
