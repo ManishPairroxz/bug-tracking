@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
     }
 
     $('#exampleModal').on('hidden.bs.modal', () => {
-      location.reload();
+      location.reload(); 
     });
   }
 
