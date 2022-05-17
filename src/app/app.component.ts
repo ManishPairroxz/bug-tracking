@@ -90,11 +90,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
 
     this.result[specificElementIndex].status = event.target.value;
 
-    if (item.status == 'fixed') {
+    if (item.status == 'fixed' || item.status == 'reopenByClient') {
       this.result[specificElementIndex].assignee = 'tester';
     } else if (item.status == 'assinged' || item.status == 'reopen') {
       this.result[specificElementIndex].assignee = 'developer';
-    } else if (item.status == 'verified') {
+    } else if (item.status == 'sendToClient') {
       this.result[specificElementIndex].assignee = 'client';
     } else if (item.status == 'closed') {
       this.bugClosed = true;

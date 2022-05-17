@@ -73,6 +73,8 @@
 }
 
 .dropbtn {
+    font-size: small;
+    font-weight: 700;
     border-radius: 7px;
     padding-left: 10px;
     padding-right: 10px;
@@ -125,4 +127,12 @@
 .dropbtn.disabled   {
     background-color: rgb(255 125 138);
     pointer-events: none;
+}
+
+.custom-option.py-0 {
+    padding-bottom: 10px !important;
+}
+
+.reverify {
+    background-color: #FF5733 !important;
 }
