@@ -4,9 +4,9 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Name</th>
+        <th scope="col">Title</th>
         <th scope="col">Assignee</th>
-        <th scope="col">Bug status</th>
+        <th scope="col" class="bug-status">Bug Status</th>
         <th scope="col">Priority</th>
       </tr>
 
@@ -14,7 +14,8 @@
     </thead>
     <tbody>
 
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add</button>
+      <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add a
+        Bug</button>
 
       <!-- 1 row -->
       <ng-container *ngIf="result">
@@ -23,63 +24,68 @@
           <!-- Details -->
           <tr>
             <th scope="row">
-              <ngx-edit-inline
-              [value]="item.title.slice(0,50)"
-              [type]="'text'"
-              [saveOption]="'onedit'"
-              [debounceTime]="500"
-              [selectText]="true"
-              (onValueChanged)="changedValue($event,item)"
-              ></ngx-edit-inline>
+              <ngx-edit-inline class="inline-edit" [value]="item.title.trim()" [type]="'text'" [saveOption]="'onedit'"
+                [debounceTime]="500" [selectText]="true" (onValueChanged)="changedValue($event,item)"></ngx-edit-inline>
             </th>
-            <td>{{item.assignee}}</td>
+            <td>{{item.assignee | titlecase}}</td>
 
             <!-- Status -->
             <td *ngIf="item.status == 'new'"><span
                 [ngClass]="item.status == 'new' ? 'badge bg-secondary custom-badge' : ''">New</span></td>
             <td *ngIf="item.status == 'assinged'"><span
-                [ngClass]="item.status == 'assinged' ? 'badge bg-primary custom-badge' : ''">Assigned</span></td>
+                [ngClass]="item.status == 'assinged' ? 'badge bg-primary custom-badge' : ''">In Progress</span></td>
             <td *ngIf="item.status == 'fixed'"><span
-                [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark custom-badge' : ''">Fixed</span></td>
+                [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark custom-badge' : ''">Code review</span>
+            </td>
 
             <td *ngIf="item.status == 'reopen'"><span
-                [ngClass]="item.status == 'reopen' ? 'badge bg-danger custom-badge' : ''">Reopen</span></td>
+                [ngClass]="item.status == 'reopen' ? 'badge bg-danger custom-badge' : ''">Bug persists</span></td>
             <td *ngIf="item.status == 'verified'">
               <span [ngClass]="item.status == 'verified' ? 'badge bg-dark custom-badge' : '' ">Verified</span>
             </td>
             <td *ngIf="item.status == 'closed'"><span
-                [ngClass]="item.status == 'closed' ? 'badge bg-success  custom-badge' : ''">Closed</span></td>
+                [ngClass]="item.status == 'closed' ? 'badge bg-success  custom-badge' : ''">Done</span></td>
             <!-- Status -->
 
             <!-- Priority -->
-            <td *ngIf="item.priority == 'low'"><span
-                [ngClass]="item.priority == 'low' ? 'badge bg-secondary custom-badge  w-100' : ''">Low</span></td>
-            <td *ngIf="item.priority == 'medium'"><span
-                [ngClass]="item.priority == 'medium' ? 'badge bg-primary  custom-badge  w-100' : ''">Medium</span></td>
-            <td *ngIf="item.priority == 'high'"><span
-                [ngClass]="item.priority == 'high' ? 'badge bg-danger custom-badge w-100' : ''">High</span></td>
+            <td>
+              <div class="dropdown">
+                <button [disabled]="item.status == 'closed'" (click)="myFunction(item, $event)" class="dropbtn" [ngStyle]="{'background-color' : item.priority == 'low' ? '#6C757D' : item.priority == 'medium' ? '#0D6EFD' : item.priority == 'high' ? '#dc3545' : ''}">{{item.priority | titlecase}}</button>
+                <div id="myDropdown-{{item._id}}" class="dropdown-content" >
+                  <a href="#" (click)="updatePriority(item, 'high')"  class="high-button">High</a>
+                  <a href="#" (click)="updatePriority(item, 'medium')" class="medium-button">Medium</a>
+                  <a href="#" (click)="updatePriority(item, 'low')" class="low-button" >Low</a>
+                </div>
+              </div>
+            </td>
+          
 
             <td>
               <select (change)="updateStatus(item, $event)">
-                <optgroup label="___Developer____">
+                <optgroup label="______________Developer_______________">
                   <option value="" disabled selected>Please select one option</option>
-                  <option value="assinged" [disabled]="item.assignee != 'developer' ">Assigned</option>
-                  <option value="fixed" [disabled]="item.assignee != 'developer' ">Fixed</option>
+                  <option value="assinged" [disabled]="item.assignee != 'developer' ">In Progress</option>
+                  <option value="fixed" [disabled]="item.assignee != 'developer' ">Code review</option>
                 </optgroup>
-                <optgroup label="____Tester_____">
-                  <option [disabled]="item.assignee != 'tester' " value="reopen">Reopened</option>
+                <optgroup label="_________________Tester_________________">
+                  <option [disabled]="item.assignee != 'tester' " value="reopen">Bug persists</option>
                   <option [disabled]="item.assignee != 'tester' " value="verified">Verified</option>
                 </optgroup>
-                <optgroup label="___Client____">
+                <optgroup label="_________________Client_________________">
                   <option value="" disabled selected>Please select an option.</option>
-                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Closed
+                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Done
                   </option>
-                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Reopened
+                  <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Bug
+                    persists
                   </option>
                 </optgroup>
               </select>
             </td>
 
+            <td>
+              <button class="btn btn-danger" (click)="onDeleteItem(item)">Delete</button>
+
+            </td>
           </tr>
           <!-- Priority -->
         </ng-container>
@@ -101,19 +107,24 @@
         <div class="modal-body">
           <form [formGroup]="addBugForm" id="exampleBugForm">
             <div class="mb-3">
-              <label for="">Title</label>
+              <label for="">Title*</label>
               <input type="text" class="form-control" id="exampleInputTitle" aria-describedby="titleJelp"
                 placeholder="Title" formControlName="title" />
-                <!-- {{addBugForm?.controls['title']?.errors['required']}} -->
+              <!-- {{addBugForm?.controls['title']?.errors['required']}} -->
               <div class="error" *ngIf="addBugForm.controls['title'].touched && addBugForm.controls['title'].errors">
                 <div *ngIf="addBugForm.controls['title'].errors['required']">
                   Title field is required.
                 </div>
+
+                <div *ngIf="addBugForm.controls['title'].hasError('whitespace')">
+                  Name Cannot contain only spaces
+                </div>
+
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="">Assignee</label>
+              <label for="">Assignee*</label>
               <select id="assigneeSelect" class="form-select" aria-placeholder="Assignee" formControlName="assignee">
                 <option value="developer" selected>Develoepr</option>
                 <!-- <option value="tester">Tester</option>
@@ -130,7 +141,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="">Priority</label>
+              <label for="">Priority*</label>
               <select id="prioritySelect" class="form-select" aria-placeholder="Priority" formControlName="priority">
                 <option value="high">High</option>
                 <option value="medium">Medium</option>

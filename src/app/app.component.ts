@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, HostListener, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgxEditInlineComponent } from 'ngx-edit-inline';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $: any;
 @Component({
@@ -17,10 +18,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   bugClosed: boolean = false;
   formSubscription: any;
 
-  constructor(public formBuilder: FormBuilder, public router: Router) {
+  constructor(public formBuilder: FormBuilder, public router: Router, private toastr  : ToastrService) {
     this.addBugForm = this.formBuilder.group({
       '_id': [''],
-      'title': ['', Validators.required],
+      'title': ['', [Validators.required, this.noWhitespaceValidator]],
       'assignee': ['', Validators.required],
       'priority': ['', Validators.required],
       'status': ['assinged']
@@ -30,19 +31,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit app component');
 
     if (localStorage.getItem('arrayOfData')) {
       let result: any = [];
 
       result = (localStorage.getItem('arrayOfData'));
       this.result = JSON.parse(result);
-      console.log(this.result);
-
     }
 
     $('#exampleModal').on('hidden.bs.modal', () => {
-      location.reload(); 
+      $("input").val("");
+      $("textarea").val("");
+      $(".error").hide();
+      this.addBugForm.reset();
     });
   }
 
@@ -51,10 +52,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   }
 
   changedValue(event: any, item: any) {
-    console.log(event);
-    console.log(item);
-    console.log(event == '');
-    console.log(event != '');
 
     // get the item from db.
     let result: any = [];
@@ -66,16 +63,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
       parsedData = JSON.parse(result);
       specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
 
-      console.log('before object', this.result[specificElementIndex]);
       this.result[specificElementIndex].title = event;
-      console.log('after object', this.result[specificElementIndex]);
-
       localStorage.setItem('arrayOfData', JSON.stringify(this.result));
     }
   }
 
   ngAfterViewInit(): void {
-    
+
   }
 
   ngOnDestroy(): void {
@@ -85,11 +79,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   }
 
   updateStatus(item: any, event: any) {
-    console.log(item);
-    console.log(event);
-
-    console.log(event.target.value);
-
     // get the item from db.
     let result: any = [];
     let parsedData: any = [];
@@ -99,19 +88,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
     parsedData = JSON.parse(result);
     specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
 
-    console.log('before object', this.result[specificElementIndex]);
     this.result[specificElementIndex].status = event.target.value;
-    console.log('after object', this.result[specificElementIndex]);
 
     if (item.status == 'fixed') {
       this.result[specificElementIndex].assignee = 'tester';
     } else if (item.status == 'assinged' || item.status == 'reopen') {
-      console.log('reopen');
-      console.log(this.result[specificElementIndex]);
-
-      console.log(this.result[specificElementIndex]['status'] == 'reopen');
-      console.log(this.result[specificElementIndex]['assignee'] == 'client');
-
       this.result[specificElementIndex].assignee = 'developer';
     } else if (item.status == 'verified') {
       this.result[specificElementIndex].assignee = 'client';
@@ -120,7 +101,86 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
     }
 
     localStorage.setItem('arrayOfData', JSON.stringify(this.result));
-    // this.ngOnInit();
+  }
+
+  onDeleteItem(item: any) {
+
+    let result: any = [];
+    let parsedData: any = [];
+    let specificElementIndex: any;
+
+    result = (localStorage.getItem('arrayOfData'));
+    parsedData = JSON.parse(result);
+    specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
+
+    this.result.splice(specificElementIndex, 1);
+    localStorage.setItem('arrayOfData', JSON.stringify(this.result));
+
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: any) {
+
+    if (!event.target['classList'].contains('dropbtn')) {
+      let dropdowns = document.getElementsByClassName("dropdown-content");
+      let i;
+
+      for (i = 0; i < dropdowns.length; i++) {
+        let openDropdown = dropdowns[i];
+
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+
+  myFunction(item: any, event: any) { 
+    // .classList.toggle("show")
+    const element = document?.getElementById("myDropdown-" + item._id);
+    console.log(element?.id);
+
+    const querySelector = document.querySelectorAll('.dropdown-content');
+    // console.log(querySelector);
+
+    for (let i = 0; i <= querySelector.length - 1; i++) {
+      console.log(querySelector[i]);
+      console.log(querySelector[i].id);
+      if(element?.id == querySelector[i].id)  {
+        console.log('true');
+
+        element.classList.toggle('show');
+      } else {
+        querySelector[i].classList.remove('show');
+      }
+      
+    }
+
+  }
+
+  public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+  }
+
+  updatePriority(item: any, value: any) {
+    console.log(item);
+    console.log(value);
+
+    let result: any = [];
+    let parsedData: any = [];
+    let specificElementIndex: any;
+
+    console.log('closed');
+    result = (localStorage.getItem('arrayOfData'));
+    parsedData = JSON.parse(result);
+    specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
+
+    // update operation
+    this.result[specificElementIndex].priority = value;
+    localStorage.setItem('arrayOfData', JSON.stringify(this.result));
+
   }
 
   onSubmit() {
@@ -130,18 +190,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
       this.addBugForm.controls['status'].setValue('assinged');
       // save the previous data + new data & save it to loaclstorage
       this.result.push(this.addBugForm.value);
-      console.log(this.result);
 
       localStorage.setItem('arrayOfData', JSON.stringify(this.result));
-
+      this.toastr.success('Bug has been added successfully');
       // close the modal & clear the form
       $('#exampleModal').modal('hide');
       this.addBugForm.reset();
-
-
-      // refresh the data
-      // this.ngOnInit();
-      // location.reload();
     }
   }
 }

@@ -3,6 +3,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { NgxEditInlineModule } from 'ngx-edit-inline';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 
@@ -15,7 +17,9 @@ import { AppComponent } from './app.component';
     FormsModule,
     ReactiveFormsModule,
     NgxEditInlineModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

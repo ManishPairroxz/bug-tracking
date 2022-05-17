@@ -4,3 +4,44 @@
 <!-- Verified(Done) -->
 <!-- Closed -->
 <!-- Reopened(Bug persists) -->
+
+Object.keys(this.addBugForm.controls).forEach(key => {
+        this.addBugForm.get(key)?.setErrors(null);
+      });
+
+                  <!-- Developer -->
+            <th>
+              <label for="">Developer</label>
+              <br>
+              <select name="developerBugStatus" id="" (change)="updateStatus(item, $event)">
+                <option value="assinged" [disabled]="item.assignee != 'developer' ">Assigned</option>
+                <option value="fixed" [disabled]="item.assignee != 'developer' ">Fixed</option>
+              </select>
+            </th>
+            <!-- Developer -->
+
+            <!-- Tester -->
+            <th>
+              <label for="">Tester</label>
+              <br>
+              <select name="testerBugStatus" id="" (change)="updateStatus(item, $event)">
+                <option value="" disabled selected>Please select one option</option>
+                <option [disabled]="item.assignee != 'tester' " value="reopen">Reopened</option>
+                <option [disabled]="item.assignee != 'tester' " value="verified">Verified</option>
+              </select>
+            </th>
+            <!-- Tester -->
+
+            <!-- Client -->
+            <th>
+              <label for="">Client</label>
+              <br>
+              <select name="clientStatus" id="" (change)="updateStatus(item, $event)">
+                <option value="" disabled selected>Please select an option.</option>
+                <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="closed">Closed
+                </option>
+                <option [disabled]="item.assignee != 'client' || this.item.status == 'closed'" value="reopen">Reopened
+                </option>
+              </select>
+
+            </th>
