@@ -8,6 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 
+const routes : Routes = [
+  { path  : '', redirectTo : 'home', pathMatch : 'full' },
+  { path : 'home', component : AppComponent}
+];
+
 @NgModule({
   declarations: [
     AppComponent
@@ -17,7 +22,7 @@ import { AppComponent } from './app.component';
     FormsModule,
     ReactiveFormsModule,
     NgxEditInlineModule,
-    RouterModule.forRoot([]),
+    RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     BrowserAnimationsModule
   ],

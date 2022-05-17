@@ -50,18 +50,20 @@
             <!-- Priority -->
             <td>
               <div class="dropdown">
-                <button [disabled]="item.status == 'closed'" (click)="myFunction(item, $event)" class="dropbtn" [ngStyle]="{'background-color' : item.priority == 'low' ? '#6C757D' : item.priority == 'medium' ? '#0D6EFD' : item.priority == 'high' ? '#dc3545' : ''}">{{item.priority | titlecase}}</button>
-                <div id="myDropdown-{{item._id}}" class="dropdown-content" >
-                  <a href="#" (click)="updatePriority(item, 'high')"  class="high-button">High</a>
+                <button [disabled]="item.status == 'closed'" (click)="myFunction(item, $event)" [ngClass]="item.status == 'closed' ? 'dropbtn disabled' : 'dropbtn'" class="dropbtn"
+                  [ngStyle]="{'background-color' : item.priority == 'low' ? '#6C757D' : item.priority == 'medium' ? '#0D6EFD' : item.priority == 'high' ? '#dc3545' : ''}">{{item.priority
+                  | titlecase}}</button>
+                <div id="myDropdown-{{item._id}}" class="dropdown-content">
+                  <a href="#" (click)="updatePriority(item, 'high')" class="high-button">High</a>
                   <a href="#" (click)="updatePriority(item, 'medium')" class="medium-button">Medium</a>
-                  <a href="#" (click)="updatePriority(item, 'low')" class="low-button" >Low</a>
+                  <a href="#" (click)="updatePriority(item, 'low')" class="low-button">Low</a>
                 </div>
               </div>
             </td>
-          
 
-            <td>
-              <select (change)="updateStatus(item, $event)">
+
+            <td class="custom-option">
+              <select (change)="updateStatus(item, $event)" class="update-status">
                 <optgroup label="______________Developer_______________">
                   <option value="" disabled selected>Please select one option</option>
                   <option value="assinged" [disabled]="item.assignee != 'developer' ">In Progress</option>
@@ -83,9 +85,32 @@
             </td>
 
             <td>
-              <button class="btn btn-danger" (click)="onDeleteItem(item)">Delete</button>
+              <button class="btn btn-danger" (click)="openDeleteModal()">Delete</button>
 
             </td>
+
+            <!-- Delete confirmation Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete a bug</h5>
+                    <button (click)="closeDeleteModal()" type="button" class="close custom-close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to delete this bug?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="onDeleteItem(item)">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeDeleteModal()">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Delete confirmation modal -->
           </tr>
           <!-- Priority -->
         </ng-container>
@@ -96,7 +121,7 @@
   </table>
   <!-- Table -->
 
-  <!-- Modal -->
+  <!--Add a bug Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -166,6 +191,8 @@
       </div>
     </div>
   </div>
-  <!-- Modal -->
+  <!--Add a bug Modal -->
+
+
 
 </div>

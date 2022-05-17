@@ -107,3 +107,22 @@
     border-right: solid 2px white;
     border-bottom: solid 2px white;
 }
+
+.custom-close   {
+    background: none;
+    border: none;
+}
+
+.custom-option  {
+    width: 15%;
+    vertical-align: middle;
+}
+
+.update-status  {
+    height: 38px;
+}
+
+.dropbtn.disabled   {
+    background-color: rgb(255 125 138);
+    pointer-events: none;
+}

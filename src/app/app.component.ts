@@ -116,6 +116,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
     this.result.splice(specificElementIndex, 1);
     localStorage.setItem('arrayOfData', JSON.stringify(this.result));
 
+    $('#deleteModal').modal('hide');
+    this.toastr.error('Bug has been deleted successfully.');
+
   }
 
   @HostListener('document:click', ['$event'])
@@ -133,6 +136,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
         }
       }
     }
+  }
+
+  openDeleteModal() {
+    $('#deleteModal').modal('show');
+  }
+
+  closeDeleteModal()  {
+    $('#deleteModal').modal('hide');
   }
 
   myFunction(item: any, event: any) { 
