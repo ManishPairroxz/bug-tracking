@@ -117,7 +117,7 @@
 
 .custom-option {
     width: 15%;
-    vertical-align: middle;
+    /* vertical-align: middle; */
 }
 
 .update-status {

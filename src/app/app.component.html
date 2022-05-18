@@ -25,7 +25,7 @@
             <!-- Details -->
             <tr>
               <th scope="row">
-                <ngx-edit-inline class="inline-edit" [value]="item.title.trim()" [type]="'text'" [saveOption]="'onedit'"
+                <ngx-edit-inline class="inline-edit" [value]="item.title.slice(0,60).trim()" [type]="'text'" [saveOption]="'onedit'"
                   [debounceTime]="500" [selectText]="true" (onValueChanged)="changedValue($event,item)">
                 </ngx-edit-inline>
               </th>
