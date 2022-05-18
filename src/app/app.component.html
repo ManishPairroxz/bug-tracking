@@ -79,7 +79,7 @@
 
             <td class="custom-option py-0">
               <label for="developerStatus">Developer</label>
-              <select id="developerStatus" (change)="updateStatus(item, $event)">
+              <select [disabled]="item.assignee != 'developer'" id="developerStatus" (change)="updateStatus(item, $event)">
                 <option value="" disabled selected>Please select one option</option>
                 <option value="assinged" [disabled]="item.assignee != 'developer' ">In Progress</option>
                 <option value="fixed" [disabled]="item.assignee != 'developer' ">In Review</option>
@@ -106,17 +106,18 @@
 
             <td class="custom-option py-0">
               <label for="developerStatus">Tester</label>
-              <select id="developerStatus" (change)="updateStatus(item, $event)">
+              <select [disabled]="!(item.assignee == 'tester') && !(item.status == 'verified') && !(item.status == 'reopen')" id="developerStatus" (change)="updateStatus(item, $event)">
                 <option value="" disabled selected>Please select one option</option>
                 <option [disabled]="!(item.assignee == 'tester') && !(item.status == 'verified') && !(item.status == 'reopen')" value="reopen">Bug Persists</option>
                 <option [disabled]="!(item.assignee == 'tester') && !(item.status == 'verified')  && !(item.status == 'reopen')" value="verified">Verified</option>
                 <option [disabled]="!(item.assignee == 'tester') && !(item.status == 'verified')  && !(item.status == 'reopen')" value="sendToClient">Send to client</option>
               </select>
+              
             </td>
 
             <td class="custom-option py-0">
               <label for="clientStatus">Client</label>
-              <select id="clientStatus" (change)="updateStatus(item, $event)">
+              <select [disabled]="!(item.assignee == 'client')" id="clientStatus" (change)="updateStatus(item, $event)">
                 <option value="" disabled selected>Please select one option</option>
                 <option [disabled]="!(item.assignee == 'client')" value="closed">Done
                 </option>
@@ -125,9 +126,8 @@
               </select>
             </td>
 
-            <td>
-              <button class="btn btn-danger" (click)="openDeleteModal()">Delete</button>
-
+            <td style="transform: translate(10px, 10px);">
+              <img class="delete-button" (click)="openDeleteModal()" src="../assets/images/delete.png" alt="">
             </td>
 
             <!-- Delete confirmation Modal -->

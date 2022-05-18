@@ -136,3 +136,7 @@
 .reverify {
     background-color: #FF5733 !important;
 }
+
+.delete-button  {
+    cursor: pointer;
+}
