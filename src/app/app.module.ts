@@ -7,24 +7,19 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
-
-const routes : Routes = [
-  { path  : '', redirectTo : 'home', pathMatch : 'full' },
-  { path : 'home', component : AppComponent}
-];
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     NgxEditInlineModule,
-    RouterModule.forRoot(routes),
+    BrowserModule,
     ToastrModule.forRoot(),
-    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
