@@ -1,0 +1,8 @@
+.task-details {
+    border: solid grey 1px;
+    border-radius: 6px;
+}
+
+tbody.collapse.in {
+    display: table-row-group;
+}

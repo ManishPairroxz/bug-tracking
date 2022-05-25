@@ -1,0 +1,353 @@
+<div class="container w-50">
+
+    <!-- Vertical tab -->
+    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="milestones-tab" data-bs-toggle="tab" data-bs-target="#milestones"
+                type="button" role="tab" aria-controls="milestones" aria-selected="true">Milestones</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="bugs-tab" data-bs-toggle="tab" data-bs-target="#bugs" type="button" role="tab"
+                aria-controls="bugs" aria-selected="false">Bugs</button>
+        </li>
+    </ul>
+    <div class="tab-content p-2" id="myTabContent">
+        <div class="tab-pane fade show active" id="milestones" role="tabpanel" aria-labelledby="milestones-tab">
+            <!-- <div class="row">
+                <button type="button" class="btn btn-outline-primary normal-button" (click)="collapse.toggle();buttonClick();"
+                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                    <span> <i [class]=" isToggle ? 'fa fa-arrow-down' : 'fa fa-arrow-right' "></i>  </span> Toggle
+                </button>
+            </div>
+            <div class="row">
+                <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="no-show">
+                    <div class="card">
+                        <div class="card-body">
+                            You can collapse this card by clicking Toggle
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <button class="btn btn-primary normal-button-open" (click)="open(content)">+ Add a
+                            Milestone</button>
+                        <button class="btn btn-primary normal-button-open m-2" (click)="open(task)">+ Add a
+                            Task</button>
+                    </tr>
+                    <tr *ngFor="let item of result; let i = index;">
+                        <th scope="row">
+                            <div class="row">
+                                <button type="button" class="btn btn-outline-primary normal-button"
+                                    (click)="collapse.toggle();buttonClick(item);"
+                                    [attr.aria-expanded]="item.tasks && (item['_id'] == isCollapsed)"
+                                    aria-controls="collapseExample">
+                                    <span> <i
+                                            [class]="item.tasks && (item['_id'] == isCollapsed) ? 'fa fa-arrow-down' : 'fa fa-arrow-right' "></i>
+                                    </span> {{item.title}}
+                                </button>
+                            </div>
+
+                            <div class="row">
+                                <div #collapse="ngbCollapse" [(ngbCollapse)]="item['_id'] != isCollapsed"
+                                    class="no-show">
+                                    <ng-container *ngIf="item.tasks">
+                                        <div class="card">
+                                            <div class="card-body py-0" *ngFor="let item of tasks;let i = index;">
+                                                <table class="table py-0 m-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">{{item.title}}</th>
+                                                            <td>{{item.assignee}}</td>
+                                                            <td>{{item.status}}</td>
+                                                            <td>
+                                                                <button class="updateTasks-button"
+                                                                    (click)="updateTasks(item);open(editTask);">
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                </div>
+
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade p-2" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
+            <app-bugs-tracking></app-bugs-tracking>
+        </div>
+    </div>
+    <!-- Vertical tab -->
+
+    <!-- Add a milestone dialog -->
+    <ng-template #content let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Add a Milestone</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="milestonesForm">
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Title</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" formControlName="title">
+                        <!-- <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button> -->
+                    </div>
+
+                    <div class="error"
+                        *ngIf="milestonesForm.controls['title'].touched && milestonesForm.controls['title'].errors">
+                        <div *ngIf="milestonesForm.controls['title'].errors['required']">
+                            Title field is required.
+                        </div>
+
+                        <div *ngIf="milestonesForm.controls['title'].hasError('whitespace')">
+                            Title Cannot contain only spaces
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Description</label>
+                    <div class="input-group">
+                        <textarea type="text" class="form-control" formControlName="description"></textarea>
+                        <!-- <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button> -->
+                    </div>
+
+                    <div class="error"
+                        *ngIf="milestonesForm.controls['description'].touched && milestonesForm.controls['description'].errors">
+                        <div *ngIf="milestonesForm.controls['description'].errors['required']">
+                            Description field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Status</label>
+                    <div class="input-group">
+                        <select id="statusSelect" class="form-select" formControlName="status">
+                            <option value="active">Active</option>
+                            <option value="not-started">Not Started</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-hold">On Hold</option>
+                        </select>
+                    </div>
+
+                    <div class="error"
+                        *ngIf="milestonesForm.controls['status'].touched && milestonesForm.controls['status'].errors">
+                        <div *ngIf="milestonesForm.controls['status'].errors['required']">
+                            Status field is required.
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button [disabled]="!milestonesForm.valid" type="button" class="btn btn-primary"
+                (click)="onAddMilestones();">Add</button>
+            <button type="button" class="btn btn-primary" (click)="closeDialog();">Cancel </button>
+        </div>
+    </ng-template>
+    <!-- Add a milestone dialog -->
+
+    <!-- Add a task dialog -->
+    <ng-template #task let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Add a Task</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="tasksForm">
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Title</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" formControlName="title">
+                        <!-- <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button> -->
+                    </div>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['title'].touched && tasksForm.controls['title'].errors">
+                        <div *ngIf="tasksForm.controls['title'].errors['required']">
+                            Title field is required.
+                        </div>
+
+                        <div *ngIf="tasksForm.controls['title'].hasError('whitespace')">
+                            Title Cannot contain only spaces
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Assignee</label>
+                    <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
+                        formControlName="assignee">
+                        <option value="" disabled selected>Please select one option</option>
+                        <option value="developer_1">Developer 1</option>
+                        <option value="developer_2">Developer 2</option>
+                        <option value="developer_3">Developer 3</option>
+                        <option value="developer_4">Developer 4</option>
+                        <option value="developer_5">Developer 5</option>
+                    </select>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['assignee'].touched && tasksForm.controls['assignee'].errors">
+                        <div *ngIf="tasksForm.controls['assignee'].errors['required']">
+                            Assignee field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Status</label>
+                    <div class="input-group">
+                        <select id="statusSelect" class="form-select" formControlName="status">
+                            <option value="active">Active</option>
+                            <option value="not-started">Not Started</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-hold">On Hold</option>
+                        </select>
+                    </div>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['status'].touched && tasksForm.controls['status'].errors">
+                        <div *ngIf="tasksForm.controls['status'].errors['required']">
+                            Status field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="milestone" class="py-2">Milestone</label>
+                    <div class="input-group">
+                        <select id="milestonesSelect" class="form-select" formControlName="milestones">
+                            <option *ngFor="let item of result; let i = index;" value="{{item._id}}">{{item.title}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['status'].touched && tasksForm.controls['status'].errors">
+                        <div *ngIf="tasksForm.controls['status'].errors['required']">
+                            Status field is required.
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button [disabled]="!tasksForm.valid" type="button" class="btn btn-primary"
+                (click)="onAddTasks();">Add</button>
+            <button type="button" class="btn btn-primary" (click)="closeDialog();">Cancel </button>
+        </div>
+    </ng-template>
+    <!-- Add a task dialog -->
+
+    <!-- Edit a task dialog -->
+    <ng-template #editTask let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Edit a Task</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="editTasksForm">
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Title</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" formControlName="title">
+                        <!-- <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button> -->
+                    </div>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['title'].touched && editTasksForm.controls['title'].errors">
+                        <div *ngIf="editTasksForm.controls['title'].errors['required']">
+                            Title field is required.
+                        </div>
+
+                        <div *ngIf="editTasksForm.controls['title'].hasError('whitespace')">
+                            Title Cannot contain only spaces
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Assignee</label>
+                    <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
+                        formControlName="assignee">
+                        <option value="" disabled selected>Please select one option</option>
+                        <option value="developer_1">Developer 1</option>
+                        <option value="developer_2">Developer 2</option>
+                        <option value="developer_3">Developer 3</option>
+                        <option value="developer_4">Developer 4</option>
+                        <option value="developer_5">Developer 5</option>
+                    </select>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['assignee'].touched && editTasksForm.controls['assignee'].errors">
+                        <div *ngIf="editTasksForm.controls['assignee'].errors['required']">
+                            Assignee field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="dateOfBirth" class="py-2">Status</label>
+                    <div class="input-group">
+                        <select id="statusSelect" class="form-select" formControlName="status">
+                            <option value="active">Active</option>
+                            <option value="not-started">Not Started</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-hold">On Hold</option>
+                        </select>
+                    </div>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['status'].touched && editTasksForm.controls['status'].errors">
+                        <div *ngIf="editTasksForm.controls['status'].errors['required']">
+                            Status field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="milestone" class="py-2">Milestone</label>
+                    <div class="input-group">
+                        <select id="milestonesSelect" class="form-select" formControlName="milestones">
+                            <option *ngFor="let item of result; let i = index;" value="{{item._id}}">{{item.title}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['status'].touched && editTasksForm.controls['status'].errors">
+                        <div *ngIf="editTasksForm.controls['status'].errors['required']">
+                            Status field is required.
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button [disabled]="!editTasksForm.valid" type="button" class="btn btn-primary"
+                (click)="onEditTasks();">Edit</button>
+            <button type="button" class="btn btn-primary" (click)="closeDialog();">Cancel </button>
+        </div>
+    </ng-template>
+    <!-- Edit a task dialog -->
+
+    <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+
+    <hr>
+</div>

@@ -1,0 +1,50 @@
+.tags {
+    border: solid grey 1px;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.add-button {
+    text-align: center;
+}
+
+.milestone-link {
+    text-decoration: none;
+    color: black;
+}
+
+.no-show {
+    padding: 0px !important;
+}
+
+.collapse-show {
+    padding: 0px !important;
+}
+
+.normal-button,
+.normal-button:hover {
+    border: wheat;
+    color: black;
+    text-align: left;
+    background: white;
+}
+
+.norma-button:focus {
+    box-shadow: none !important;
+}
+
+.normal-button-open {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+.error {
+    color: red;
+}
+
+.updateTasks-button {
+    background: white;
+    border: none;
+}

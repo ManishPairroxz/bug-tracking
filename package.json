@@ -18,6 +18,8 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@ng-bootstrap/ng-bootstrap": "^12.1.2",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "ngx-edit-inline": "^1.1.2",
     "ngx-toastr": "^14.3.0",

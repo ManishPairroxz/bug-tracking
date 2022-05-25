@@ -21,7 +21,7 @@ const bugsRouting = RouterModule.forChild([
         bugsRouting
     ],
     declarations: [
-        BugsComponent
+        
     ],
     exports: [RouterModule]
 })
