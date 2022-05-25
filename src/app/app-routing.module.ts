@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 
 const routes: Routes = [
-    { path: '', redirectTo: 'bugs', pathMatch: 'full' },
+    { path: '', redirectTo: 'milestones', pathMatch: 'full' },
     { path: 'bugs', loadChildren : () => import('./modules/bugs/bugs.module').then(m => m.BugsModule) },
     {   path:   'milestones',   loadChildren    :   ()  =>  import('./modules/milestones/milestones.module').then(m  =>  m.MilestonesModule)}
 ];
