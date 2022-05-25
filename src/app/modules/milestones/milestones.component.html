@@ -1,4 +1,4 @@
-<div class="container w-50">
+<div class="container">
 
     <!-- Vertical tab -->
     <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
@@ -54,17 +54,42 @@
                                     class="no-show">
                                     <ng-container *ngIf="item.tasks">
                                         <div class="card">
-                                            <div class="card-body py-0" *ngFor="let item of tasks;let i = index;">
+
+                                            <div class="card-body py-0">
                                                 <table class="table py-0 m-0">
-                                                    <tbody>
+                                                    <thead>
                                                         <tr>
-                                                            <th scope="row">{{item.title}}</th>
+                                                            <th scope="col">Title</th>
+                                                            <th scope="col">Assignees</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Start Date</th>
+                                                            <th scope="col">End Date</th>
+                                                            <th scope="col">Update</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of tasks;let i = index;" style="font-weight: 400;">
+                                                            <th style="width: 40%;font-weight: 400;" scope="row">
+                                                                <ng-container
+                                                                    *ngIf="item.title.length > 40; else normalTitle;">
+                                                                    {{item.title.slice(0, 40)}}...
+                                                                </ng-container>
+
+                                                                <ng-template #normalTitle>
+                                                                    {{item.title}}
+                                                                </ng-template>
+
+                                                            </th>
                                                             <td>{{item.assignee}}</td>
                                                             <td>{{item.status}}</td>
+                                                            <td *ngIf="item.startDate">{{item.startDate |
+                                                                customDatePipe}}</td>
+                                                            <td *ngIf="item.endDate">{{item.endDate | customDatePipe}}
+                                                            </td>
                                                             <td>
                                                                 <button class="updateTasks-button"
                                                                     (click)="updateTasks(item);open(editTask);">
-                                                                    <i class="fa fa-info-circle"></i>
+                                                                    <i class="fa fa-pencil"></i>
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -192,11 +217,11 @@
                     <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
                         formControlName="assignee">
                         <option value="" disabled selected>Please select one option</option>
-                        <option value="developer_1">Developer 1</option>
-                        <option value="developer_2">Developer 2</option>
-                        <option value="developer_3">Developer 3</option>
-                        <option value="developer_4">Developer 4</option>
-                        <option value="developer_5">Developer 5</option>
+                        <option value="manish_pamnani">Manish Pamnani</option>
+                        <option value="lalit_singh_fatehpuria">Lalit Prakash Fatehpuria</option>
+                        <option value="kamal_suyal">Kamal Suyal</option>
+                        <option value="fahim_khokar">Fahim Khokar</option>
+                        <option value="sonu_sharma">Sonu Sharma</option>
                     </select>
 
                     <div class="error"
@@ -239,6 +264,48 @@
                         *ngIf="tasksForm.controls['status'].touched && tasksForm.controls['status'].errors">
                         <div *ngIf="tasksForm.controls['status'].errors['required']">
                             Status field is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="startDate" class="py-2">Start Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event)">
+                        <button class="btn btn-outline-secondary calendar"
+                            (click)="d.toggle();isEndDateDisabled = !isEndDateDisabled;" type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                        <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
+
+                    </div>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['startDate'].touched && tasksForm.controls['startDate'].errors">
+                        <div *ngIf="tasksForm.controls['startDate'].errors['required']">
+                            Start Date is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="endtDate" class="py-2">End Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
+                            #endDate="ngbDatepicker" formControlName="endDate" [disabled]="isEndDateDisabled"
+                            [minDate]="endMinDate">
+                        <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                        <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
+
+                    </div>
+
+                    <div class="error"
+                        *ngIf="tasksForm.controls['endDate'].touched && tasksForm.controls['endDate'].errors">
+                        <div *ngIf="tasksForm.controls['endDate'].errors['required']">
+                            End Date is required.
                         </div>
                     </div>
                 </div>
@@ -286,11 +353,11 @@
                     <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
                         formControlName="assignee">
                         <option value="" disabled selected>Please select one option</option>
-                        <option value="developer_1">Developer 1</option>
-                        <option value="developer_2">Developer 2</option>
-                        <option value="developer_3">Developer 3</option>
-                        <option value="developer_4">Developer 4</option>
-                        <option value="developer_5">Developer 5</option>
+                        <option value="manish_pamnani">Manish Pamnani</option>
+                        <option value="lalit_singh_fatehpuria">Lalit Prakash Fatehpuria</option>
+                        <option value="kamal_suyal">Kamal Suyal</option>
+                        <option value="fahim_khokar">Fahim Khokar</option>
+                        <option value="sonu_sharma">Sonu Sharma</option>
                     </select>
 
                     <div class="error"
@@ -321,6 +388,48 @@
                 </div>
 
                 <div class="p-1">
+                    <label for="startDate" class="py-2">Start Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event)">
+                        <button class="btn btn-outline-secondary calendar"
+                            (click)="d.toggle();isEndDateDisabled = !isEndDateDisabled;" type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                        <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
+
+                    </div>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['startDate'].touched && editTasksForm.controls['startDate'].errors">
+                        <div *ngIf="editTasksForm.controls['startDate'].errors['required']">
+                            Start Date is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
+                    <label for="endtDate" class="py-2">End Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
+                            #endDate="ngbDatepicker" formControlName="endDate" [disabled]="isEndDateDisabled"
+                            [minDate]="endMinDate">
+                        <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                        <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
+
+                    </div>
+
+                    <div class="error"
+                        *ngIf="editTasksForm.controls['endDate'].touched && editTasksForm.controls['endDate'].errors">
+                        <div *ngIf="editTasksForm.controls['endDate'].errors['required']">
+                            End Date is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-1">
                     <label for="milestone" class="py-2">Milestone</label>
                     <div class="input-group">
                         <select id="milestonesSelect" class="form-select" formControlName="milestones">
@@ -346,6 +455,8 @@
         </div>
     </ng-template>
     <!-- Edit a task dialog -->
+
+
 
     <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
 
