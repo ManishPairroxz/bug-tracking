@@ -5,6 +5,7 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import * as moment from "moment";
 declare var $: any;
 
 @Component({
@@ -31,7 +32,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     isEndDateDisabled: boolean = true;
     public minDate: any = {};
     public endMinDate: any = {};
-
+    public startDate : any;
+    public endDate : any;
+    public isEndDateSmaller : boolean = false;
 
 
     constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private calendar: NgbCalendar) {
@@ -111,14 +114,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             allowSearchFilter: true
         };
 
-        $('#modal-basic-title').on('hidden.bs.modal', () => {
-            $("input").val("");
-            $("textarea").val("");
-            $(".error").hide();
-            this.milestonesForm.reset();
-            this.tasksForm.reset();
-            this.editTasksForm.reset();
-        });
+        
     }
 
     onItemSelect(event : any)   {
@@ -187,8 +183,51 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     setEndDate(event: any) {
         // this.isEndDateDisabled = !this.isEndDateDisabled;
 
-        console.log(event);
+        this.startDate = event;
+        
         this.endMinDate = event;
+        // this.endDate = event;
+
+        // console.log('startDate`' , this.startDate);
+        // console.log('endDate' , this.endDate);
+
+        let startDate = new Date(this.startDate['year'], this.startDate['month'], this.startDate['day']);
+        // console.log(startDate);
+// 
+        if(this.endDate && startDate)    {
+            console.log('endDate && startDate');
+            let endDate = new Date(this.endDate['year'], this.endDate['month'], this.endDate['day']);
+            console.log('startDate', startDate);
+            console.log('endDate' , endDate);
+
+            console.log(startDate.getTime());
+            console.log(endDate.getTime());
+    
+            if (endDate >= startDate) {
+                this.isEndDateSmaller = false;
+            }   else if (endDate < startDate) {
+                this.isEndDateSmaller = true;
+            }
+        }
+
+    }
+
+    onEndDateSelect(event : any)    {
+        console.log('startDate`' , this.startDate);
+        console.log('endDate' , event);
+        this.endDate = event;
+
+        let startDate = new Date(this.startDate['year'], this.startDate['month'], this.startDate['day']);
+        let endDate = new Date(event['year'], event['month'], event['day']);
+
+        console.log(startDate.getTime());
+        console.log(endDate.getTime());
+
+        if (endDate >= startDate) {
+            this.isEndDateSmaller = false;
+        }   else if (endDate < startDate) {
+            this.isEndDateSmaller = true;
+        }
     }
 
     updateTasks(item: any) {
@@ -230,6 +269,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     private getDismissReason(reason: any): string {
+        console.log('getDismiss reason');
         if (reason === ModalDismissReasons.ESC) {
             return 'by pressing ESC';
         } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {

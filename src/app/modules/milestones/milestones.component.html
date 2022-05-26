@@ -319,7 +319,7 @@
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
                             #endDate="ngbDatepicker" formControlName="endDate"
-                            [minDate]="endMinDate" [readonly]="true" [disabled]="isEndDateDisabled">
+                            [minDate]="endMinDate" [readonly]="true" [disabled]="isEndDateDisabled" (dateSelect)="onEndDateSelect($event)">
                         <button [disabled]="isEndDateDisabled" class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
@@ -332,6 +332,11 @@
                         <div *ngIf="tasksForm.controls['endDate'].errors['required']">
                             End Date is required.
                         </div>
+                    </div>
+
+                    <!-- {{isEndDateSmaller}} -->
+                    <div class="error"  *ngIf="isEndDateSmaller">
+                        End Date is smaller than Start Date.
                     </div>
                 </div>
 
