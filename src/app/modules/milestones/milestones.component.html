@@ -448,7 +448,7 @@
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
                             #endDate="ngbDatepicker" formControlName="endDate"
-                            [minDate]="endMinDate" [disabled]="isEndDateDisabled" [readonly]="true">
+                            [minDate]="endMinDate" [disabled]="isEndDateDisabled" [readonly]="true" (dateSelect)="onEndDateSelect($event)">
                         <button [disabled]="isEndDateDisabled" class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
