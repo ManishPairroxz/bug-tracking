@@ -5,6 +5,7 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+declare var $: any;
 
 @Component({
     selector: 'app-milestones',
@@ -109,6 +110,15 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             itemsShowLimit: 3,
             allowSearchFilter: true
         };
+
+        $('#modal-basic-title').on('hidden.bs.modal', () => {
+            $("input").val("");
+            $("textarea").val("");
+            $(".error").hide();
+            this.milestonesForm.reset();
+            this.tasksForm.reset();
+            this.editTasksForm.reset();
+        });
     }
 
     onItemSelect(event : any)   {

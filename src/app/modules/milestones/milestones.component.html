@@ -297,7 +297,7 @@
                     <label for="startDate" class="py-2">Start Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
-                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = !isEndDateDisabled;" [readonly]="true">
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = false;" [readonly]="true">
                         <button class="btn btn-outline-secondary calendar"
                             (click)="d.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
@@ -421,7 +421,7 @@
                     <label for="startDate" class="py-2">Start Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
-                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = !isEndDateDisabled;" [readonly]="true">
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = false;" [readonly]="true">
                         <button class="btn btn-outline-secondary calendar"
                             (click)="d.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
