@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Router, RouterModule } from "@angular/router";
 import { NgbAccordionModule, NgbCollapseModule, NgbDatepickerModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { NgxEditInlineModule } from "ngx-edit-inline";
 import { ToastrModule } from "ngx-toastr";
 import { BugsComponent } from "../bugs/bugs.component";
@@ -28,6 +29,7 @@ const mileStonesRouting = RouterModule.forChild([
         NgbCollapseModule,
         NgbDatepickerModule,
         ToastrModule.forRoot(),
+        NgMultiSelectDropDownModule.forRoot(),
         mileStonesRouting,
     ],
     declarations: [

@@ -68,7 +68,8 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let item of tasks;let i = index;" style="font-weight: 400;">
+                                                        <tr *ngFor="let item of tasks;let i = index;"
+                                                            style="font-weight: 400;">
                                                             <th style="width: 40%;font-weight: 400;" scope="row">
                                                                 <ng-container
                                                                     *ngIf="item.title.length > 40; else normalTitle;">
@@ -80,7 +81,27 @@
                                                                 </ng-template>
 
                                                             </th>
-                                                            <td>{{item.assignee}}</td>
+                                                            <ng-container *ngIf="item.assignee">
+                                                                <td class="d-flex justify-content-between">
+                                                                    <span
+                                                                        *ngFor="let item of item.assignee; let i = index;">
+                                                                        <div style="
+                                                                        border-radius: 100%;
+                                                                        width: 35px;
+                                                                        height: 35px;
+                                                                        line-height: 35px;
+                                                                        border-radius: 50%;
+                                                                        font-size: 15px;
+                                                                        color: #fff;
+                                                                        text-align: center;
+                                                                        background: grey" data-toggle="tooltip"
+                                                                            data-placement="top"
+                                                                            title="{{item.item_text}}">
+                                                                            {{item.item_text[0].toUpperCase()}}</div>
+                                                                    </span>
+
+                                                                </td>
+                                                            </ng-container>
                                                             <td>{{item.status}}</td>
                                                             <td *ngIf="item.startDate">{{item.startDate |
                                                                 customDatePipe}}</td>
@@ -214,7 +235,7 @@
 
                 <div class="p-1">
                     <label for="dateOfBirth" class="py-2">Assignee</label>
-                    <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
+                    <!-- <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
                         formControlName="assignee">
                         <option value="" disabled selected>Please select one option</option>
                         <option value="manish_pamnani">Manish Pamnani</option>
@@ -222,7 +243,11 @@
                         <option value="kamal_suyal">Kamal Suyal</option>
                         <option value="fahim_khokar">Fahim Khokar</option>
                         <option value="sonu_sharma">Sonu Sharma</option>
-                    </select>
+                    </select> -->
+                    <ng-multiselect-dropdown [placeholder]="'Select an assignee'" [settings]="dropdownSettings"
+                        [data]="dropdownList" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)"
+                        formControlName="assignee">
+                    </ng-multiselect-dropdown>
 
                     <div class="error"
                         *ngIf="tasksForm.controls['assignee'].touched && tasksForm.controls['assignee'].errors">
@@ -350,7 +375,7 @@
 
                 <div class="p-1">
                     <label for="dateOfBirth" class="py-2">Assignee</label>
-                    <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
+                    <!-- <select id="clientStatus" class="form-select" (change)="updateAssignee(item, $event)"
                         formControlName="assignee">
                         <option value="" disabled selected>Please select one option</option>
                         <option value="manish_pamnani">Manish Pamnani</option>
@@ -358,7 +383,12 @@
                         <option value="kamal_suyal">Kamal Suyal</option>
                         <option value="fahim_khokar">Fahim Khokar</option>
                         <option value="sonu_sharma">Sonu Sharma</option>
-                    </select>
+                    </select> -->
+                    <ng-multiselect-dropdown [placeholder]="'Select an assignee'" [settings]="dropdownSettings"
+                        [data]="dropdownList" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)"
+                        formControlName="assignee">
+                    </ng-multiselect-dropdown>
+
 
                     <div class="error"
                         *ngIf="editTasksForm.controls['assignee'].touched && editTasksForm.controls['assignee'].errors">

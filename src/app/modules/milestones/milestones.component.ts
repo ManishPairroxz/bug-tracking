@@ -4,6 +4,7 @@ import { NgbModal, ModalDismissReasons, NgbDatepicker, NgbAccordion } from '@ng-
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
     selector: 'app-milestones',
@@ -12,6 +13,9 @@ import { ToastrService } from "ngx-toastr";
 })
 
 export class MilestonesComponent implements OnInit, OnDestroy {
+    dropdownList : any = [];
+    selectedItems : any = [];
+    dropdownSettings = {};
     closeResult = '';
     milestonesForm: FormGroup;
     tasksForm: FormGroup;
@@ -22,10 +26,10 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     date: any = {};
     public isCollapsed = true;
     isToggle: boolean = false;
-    isDisabled  :   boolean =   false;
-    isEndDateDisabled   :   boolean = true;
-    public minDate : any = {};
-    public endMinDate   :   any = {};
+    isDisabled: boolean = false;
+    isEndDateDisabled: boolean = true;
+    public minDate: any = {};
+    public endMinDate: any = {};
 
 
 
@@ -44,8 +48,8 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             assignee: new FormControl('', [Validators.required]),
             status: new FormControl('', [Validators.required]),
             milestones: new FormControl('', [Validators.required]),
-            startDate   :   new FormControl('', Validators.required),
-            endDate : new FormControl('', Validators.required)
+            startDate: new FormControl('', Validators.required),
+            endDate: new FormControl('', Validators.required)
         });
 
         this.editTasksForm = this.formBuilder.group({
@@ -54,8 +58,8 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             assignee: new FormControl('', [Validators.required]),
             status: new FormControl('', [Validators.required]),
             milestones: new FormControl('', [Validators.required]),
-            startDate   :   new FormControl('', Validators.required),
-            endDate : new FormControl('', Validators.required)
+            startDate: new FormControl('', Validators.required),
+            endDate: new FormControl('', Validators.required)
         });
 
         let date = new Date();
@@ -64,7 +68,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         console.log(date.getMonth());
         console.log(date.getUTCDate());
 
-        this.minDate = {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getUTCDate()};
+        this.minDate = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getUTCDate() };
         console.log(this.minDate);
 
     }
@@ -84,6 +88,35 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
             console.log(this.tasks);
         }
+
+        this.dropdownList = [
+            { item_id: 'manish_pamnani', item_text: 'Manish Pamnani' },
+            { item_id: 'lalit_singh_fatehpuria', item_text: 'Lalit Prakash Fatehpuria' },
+            { item_id: 'kamal_suyal', item_text: 'Kamal Suyal' },
+            { item_id: 'fahim_khokar', item_text: 'Fahim Khokar' },
+            { item_id: 'sonu_sharma', item_text: 'Sonu Sharma' }
+        ];
+        this.selectedItems = [
+            { item_id: 3, item_text: 'Pune' },
+            { item_id: 4, item_text: 'Navsari' }
+        ];
+        this.dropdownSettings = {
+            singleSelection: false,
+            idField: 'item_id',
+            textField: 'item_text',
+            selectAllText: 'Select All',
+            unSelectAllText: 'UnSelect All',
+            itemsShowLimit: 3,
+            allowSearchFilter: true
+        };
+    }
+
+    onItemSelect(event : any)   {
+        console.log(event);
+    }
+
+    onSelectAll(event : any)   {
+        console.log(event);
     }
 
     createTasksUpdateForm(userData: any) {
@@ -112,10 +145,10 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         if (typeof (userData.milestones) != 'undefined') {
             milestones = userData.milestones;
         }
-        if(typeof(userData.startDate) != 'undefined')   {
+        if (typeof (userData.startDate) != 'undefined') {
             startDate = userData.startDate;
         }
-        if(typeof(userData.endDate) != 'undefined') {
+        if (typeof (userData.endDate) != 'undefined') {
             endDate = userData.endDate;
         }
 
@@ -125,8 +158,8 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             assignee: new FormControl(assignee, [Validators.required]),
             status: new FormControl(status, [Validators.required]),
             milestones: new FormControl(milestones, [Validators.required]),
-            startDate : new FormControl(startDate, [Validators.required]),
-            endDate : new FormControl(endDate, [Validators.required]),
+            startDate: new FormControl(startDate, [Validators.required]),
+            endDate: new FormControl(endDate, [Validators.required]),
         });
 
     }
@@ -141,7 +174,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         });
     }
 
-    setEndDate(event : any)    {
+    setEndDate(event: any) {
         // this.isEndDateDisabled = !this.isEndDateDisabled;
 
         console.log(event);
