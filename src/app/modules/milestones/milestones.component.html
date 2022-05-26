@@ -297,9 +297,9 @@
                     <label for="startDate" class="py-2">Start Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
-                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event)">
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = !isEndDateDisabled;" [readonly]="true">
                         <button class="btn btn-outline-secondary calendar"
-                            (click)="d.toggle();isEndDateDisabled = !isEndDateDisabled;" type="button">
+                            (click)="d.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
                         <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
@@ -318,9 +318,9 @@
                     <label for="endtDate" class="py-2">End Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
-                            #endDate="ngbDatepicker" formControlName="endDate" [disabled]="isEndDateDisabled"
-                            [minDate]="endMinDate">
-                        <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
+                            #endDate="ngbDatepicker" formControlName="endDate"
+                            [minDate]="endMinDate" [readonly]="true" [disabled]="isEndDateDisabled">
+                        <button [disabled]="isEndDateDisabled" class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
                         <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
@@ -421,9 +421,9 @@
                     <label for="startDate" class="py-2">Start Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="dp" ngbDatepicker #d="ngbDatepicker"
-                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event)">
+                            formControlName="startDate" [minDate]="minDate" (dateSelect)="setEndDate($event);isEndDateDisabled = !isEndDateDisabled;" [readonly]="true">
                         <button class="btn btn-outline-secondary calendar"
-                            (click)="d.toggle();isEndDateDisabled = !isEndDateDisabled;" type="button">
+                            (click)="d.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
                         <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
@@ -442,9 +442,9 @@
                     <label for="endtDate" class="py-2">End Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="YYYY-MM-DD" name="endDate" ngbDatepicker
-                            #endDate="ngbDatepicker" formControlName="endDate" [disabled]="isEndDateDisabled"
-                            [minDate]="endMinDate">
-                        <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
+                            #endDate="ngbDatepicker" formControlName="endDate"
+                            [minDate]="endMinDate" [disabled]="isEndDateDisabled" [readonly]="true">
+                        <button [disabled]="isEndDateDisabled" class="btn btn-outline-secondary calendar" (click)="endDate.toggle();" type="button">
                             <i class="fa fa-calendar"></i>
                         </button>
                         <!-- <ngb-datepicker  #dp (navigate)="date = $event.next"></ngb-datepicker> -->
