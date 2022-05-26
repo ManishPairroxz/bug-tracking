@@ -37,6 +37,7 @@
                             Task</button>
                     </tr>
                     <tr *ngFor="let item of result; let i = index;">
+                        
                         <th scope="row">
                             <div class="row">
                                 <button type="button" class="btn btn-outline-primary normal-button"
@@ -68,7 +69,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let item of tasks;let i = index;"
+                                                        <tr *ngFor="let item of item.tasks;let i = index;"
                                                             style="font-weight: 400;">
                                                             <th style="width: 40%;font-weight: 400;" scope="row">
                                                                 <ng-container

@@ -24,7 +24,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     BrowserAnimationsModule,
     NgbModule,
     ToastrModule.forRoot(),
-    NgMultiSelectDropDownModule.forRoot()
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

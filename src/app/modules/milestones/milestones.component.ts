@@ -43,6 +43,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             title: new FormControl('', [Validators.required, this.noWhitespaceValidator]),
             description: new FormControl('', [Validators.required]),
             status: new FormControl('', [Validators.required]),
+            tasks : new FormControl([])
             // dueDate :   new FormControl({'year': 2018, 'month': 12, 'day': 12}, [Validators.required])
         });
 
@@ -91,6 +92,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.tasks = JSON.parse(localTasks);
 
             console.log(this.tasks);
+            console.log(this.result);
         }
 
         this.dropdownList = [
@@ -281,7 +283,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     closeDialog() {
         this.modalService.dismissAll();
-    }
+    } 
 
     onAddMilestones() {
         if (this.milestonesForm.valid) {
@@ -292,6 +294,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.toastr.success('Milestone has been added successfully');
             this.closeDialog();
             this.milestonesForm.reset();
+            location.reload();
         }
     }
 
@@ -300,7 +303,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.tasksForm.controls['_id'].setValue(Math.floor(Math.random() * 90000) + 10000);
 
             console.log(this.tasks);
+            console.log(this.tasksForm.value);
             this.tasks?.push(this.tasksForm.value);
+            console.log(this.tasks);
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             let result: any = [];
@@ -309,13 +314,19 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             // FInd the milestone realted with this task
             result = (localStorage.getItem('milestones'));
             let parsedData = JSON.parse(result);
+            console.log('parsedData', parsedData);
+
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
-            // update the table
-            this.result[milestoneItem].tasks = this.tasksForm.value;
+            console.log('milestoneItem', milestoneItem);
+            // // update the table
+            this.result[milestoneItem].tasks?.push(this.tasksForm.value);
+            console.log('this.result', this.result);
+            
+            console.log('this.result.milestoneItem', this.result[milestoneItem]);
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
-            this.tasksForm.reset();
+            // this.tasksForm.reset();
         }
     }
 
