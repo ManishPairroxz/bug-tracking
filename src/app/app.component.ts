@@ -149,16 +149,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   myFunction(item: any, event: any) { 
     // .classList.toggle("show")
     const element = document?.getElementById("myDropdown-" + item._id);
-    console.log(element?.id);
+     
 
     const querySelector = document.querySelectorAll('.dropdown-content');
-    // console.log(querySelector);
+    //  
 
     for (let i = 0; i <= querySelector.length - 1; i++) {
-      console.log(querySelector[i]);
-      console.log(querySelector[i].id);
+       
+       
       if(element?.id == querySelector[i].id)  {
-        console.log('true');
+         
 
         element.classList.toggle('show');
       } else {
@@ -176,14 +176,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges
   }
 
   updatePriority(item: any, value: any) {
-    console.log(item);
-    console.log(value);
+     
+     
 
     let result: any = [];
     let parsedData: any = [];
     let specificElementIndex: any;
 
-    console.log('closed');
+     
     result = (localStorage.getItem('arrayOfData'));
     parsedData = JSON.parse(result);
     specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);

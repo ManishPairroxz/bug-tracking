@@ -25,10 +25,7 @@
                         <!-- Details -->
                         <tr>
                             <th scope="row">
-                                <ngx-edit-inline class="inline-edit" [value]="item.title.slice(0,60).trim()"
-                                    [type]="'text'" [saveOption]="'onedit'" [debounceTime]="500" [selectText]="true"
-                                    (onValueChanged)="changedValue($event,item)">
-                                </ngx-edit-inline>
+                                {{item.title}}
                             </th>
                             <td>{{item.assignee | titlecase}}</td>
 
@@ -254,6 +251,43 @@
                                 *ngIf="addBugForm.controls['priority'].touched && addBugForm.controls['priority'].errors">
                                 <div *ngIf="addBugForm.controls['priority'].errors['required']">
                                     Priority field is required.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="">Milestone*</label>
+                            <select id="milestoneSelect" class="form-select" aria-placeholder="Milestone"
+                                formControlName="milestones" (change)="onSeeMilestone($event)">
+                                <option *ngFor="let item of milestones; let i = index;" [value]="item._id">
+                                    {{item.title}}
+                                </option>
+                            </select>
+
+                            <div class="error"
+                                *ngIf="addBugForm.controls['milestones'].touched && addBugForm.controls['milestones'].errors">
+                                <div *ngIf="addBugForm.controls['milestones'].errors['required']">
+                                    Milestone field is required.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="">Tasks*</label>
+                            <select id="tasksSelect" class="form-select" aria-placeholder="Tasks"
+                                formControlName="tasks" (change)="onSeeTasks($event)">
+                                <option value="" disabled>Please select Milestones first</option>
+                                <option *ngFor="let item of tasks; let i = index;" [value]="item._id">
+                                    {{item.title}}
+                                </option>
+                            </select>
+
+                            <div class="error"
+                                *ngIf="addBugForm.controls['tasks'].touched && addBugForm.controls['tasks'].errors">
+                                <div *ngIf="addBugForm.controls['tasks'].errors['required']">
+                                    Milestone field is required.
                                 </div>
                             </div>
 

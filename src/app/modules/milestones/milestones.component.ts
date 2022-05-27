@@ -15,8 +15,8 @@ declare var $: any;
 })
 
 export class MilestonesComponent implements OnInit, OnDestroy {
-    dropdownList : any = [];
-    selectedItems : any = [];
+    dropdownList: any = [];
+    selectedItems: any = [];
     dropdownSettings = {};
     closeResult = '';
     milestonesForm: FormGroup;
@@ -27,15 +27,17 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     model: any;
     date: any = {};
     public isCollapsed = true;
+    public isTasksCollapesed    :   boolean =   true;
+
     isToggle: boolean = false;
     isDisabled: boolean = false;
     isEndDateDisabled: boolean = true;
     public minDate: any = {};
     public endMinDate: any = {};
-    public startDate : any;
-    public endDate : any;
-    public isEndDateSmaller : boolean = false;
-
+    public startDate: any;
+    public endDate: any;
+    public isEndDateSmaller: boolean = false;
+    public showTasks    :   boolean =   false;
 
     constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private calendar: NgbCalendar) {
         this.milestonesForm = this.formBuilder.group({
@@ -43,7 +45,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             title: new FormControl('', [Validators.required, this.noWhitespaceValidator]),
             description: new FormControl('', [Validators.required]),
             status: new FormControl('', [Validators.required]),
-            tasks : new FormControl([])
+            tasks: new FormControl([])
             // dueDate :   new FormControl({'year': 2018, 'month': 12, 'day': 12}, [Validators.required])
         });
 
@@ -68,19 +70,12 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         });
 
         let date = new Date();
-        console.log(date);
-        console.log(date.getFullYear());
-        console.log(date.getMonth());
-        console.log(date.getUTCDate());
 
         this.minDate = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getUTCDate() };
-        console.log(this.minDate);
 
     }
 
     ngOnInit(): void {
-
-
         if (localStorage.getItem('milestones')) {
             let result: any = [];
             let localTasks: any = [];
@@ -89,10 +84,12 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             localTasks = localStorage.getItem('tasks');
 
             this.result = JSON.parse(result);
-            this.tasks = JSON.parse(localTasks);
-
-            console.log(this.tasks);
             console.log(this.result);
+            this.tasks = JSON.parse(localTasks);
+            if(!this.tasks) {
+                this.tasks = [];
+                console.log(this.tasks);
+            }
         }
 
         this.dropdownList = [
@@ -101,10 +98,6 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             { item_id: 'kamal_suyal', item_text: 'Kamal Suyal' },
             { item_id: 'fahim_khokar', item_text: 'Fahim Khokar' },
             { item_id: 'sonu_sharma', item_text: 'Sonu Sharma' }
-        ];
-        this.selectedItems = [
-            { item_id: 3, item_text: 'Pune' },
-            { item_id: 4, item_text: 'Navsari' }
         ];
         this.dropdownSettings = {
             singleSelection: false,
@@ -115,19 +108,17 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             itemsShowLimit: 3,
             allowSearchFilter: true
         };
-
-        
     }
 
-    onItemSelect(event : any)   {
-        console.log(event);
+    onItemSelect(event: any) {
     }
 
-    onSelectAll(event : any)   {
-        console.log(event);
+    onSelectAll(event: any) {
     }
 
     createTasksUpdateForm(userData: any) {
+        console.log(userData);
+
         let _id = '';
         let title = '';
         let assignee = '';
@@ -136,28 +127,28 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let startDate = '';
         let endDate = '';
 
-        if (typeof (userData._id) != 'undefined') {
-            _id = userData._id;
+        if (typeof (userData[0]._id) != 'undefined') {
+            _id = userData[0]._id;
 
         }
-        if (typeof (userData.title) != 'undefined') {
-            title = userData.title;
+        if (typeof (userData[0].title) != 'undefined') {
+            title = userData[0].title;
 
         }
-        if (typeof (userData.assignee) != 'undefined') {
-            assignee = userData.assignee;
+        if (typeof (userData[0].assignee) != 'undefined') {
+            assignee = userData[0].assignee;
         }
-        if (typeof (userData.status) != 'undefined') {
-            status = userData.status;
+        if (typeof (userData[0].status) != 'undefined') {
+            status = userData[0].status;
         }
-        if (typeof (userData.milestones) != 'undefined') {
-            milestones = userData.milestones;
+        if (typeof (userData[0].milestones) != 'undefined') {
+            milestones = userData[0].milestones;
         }
-        if (typeof (userData.startDate) != 'undefined') {
-            startDate = userData.startDate;
+        if (typeof (userData[0].startDate) != 'undefined') {
+            startDate = userData[0].startDate;
         }
-        if (typeof (userData.endDate) != 'undefined') {
-            endDate = userData.endDate;
+        if (typeof (userData[0].endDate) != 'undefined') {
+            endDate = userData[0].endDate;
         }
 
         this.editTasksForm = this.formBuilder.group({
@@ -172,62 +163,41 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     }
 
-
-
     open(content: any) {
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
             this.closeResult = `Closed with: ${result}`;
+            console.log(this.closeResult);
         }, (reason) => {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
     }
 
     setEndDate(event: any) {
-        // this.isEndDateDisabled = !this.isEndDateDisabled;
-
         this.startDate = event;
-        
         this.endMinDate = event;
-        // this.endDate = event;
-
-        // console.log('startDate`' , this.startDate);
-        // console.log('endDate' , this.endDate);
-
         let startDate = new Date(this.startDate['year'], this.startDate['month'], this.startDate['day']);
-        // console.log(startDate);
-// 
-        if(this.endDate && startDate)    {
-            console.log('endDate && startDate');
-            let endDate = new Date(this.endDate['year'], this.endDate['month'], this.endDate['day']);
-            console.log('startDate', startDate);
-            console.log('endDate' , endDate);
 
-            console.log(startDate.getTime());
-            console.log(endDate.getTime());
-    
+        if (this.endDate && startDate) {
+            let endDate = new Date(this.endDate['year'], this.endDate['month'], this.endDate['day']);
+
             if (endDate >= startDate) {
                 this.isEndDateSmaller = false;
-            }   else if (endDate < startDate) {
+            } else if (endDate < startDate) {
                 this.isEndDateSmaller = true;
             }
         }
 
     }
 
-    onEndDateSelect(event : any)    {
-        console.log('startDate`' , this.startDate);
-        console.log('endDate' , event);
+    onEndDateSelect(event: any) {
         this.endDate = event;
 
         let startDate = new Date(this.startDate['year'], this.startDate['month'], this.startDate['day']);
         let endDate = new Date(event['year'], event['month'], event['day']);
 
-        console.log(startDate.getTime());
-        console.log(endDate.getTime());
-
         if (endDate >= startDate) {
             this.isEndDateSmaller = false;
-        }   else if (endDate < startDate) {
+        } else if (endDate < startDate) {
             this.isEndDateSmaller = true;
         }
     }
@@ -238,9 +208,14 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let parsedData: any = [];
         result = localStorage.getItem('tasks');
         parsedData = JSON.parse(result);
+        console.log(parsedData);
 
-        specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
+        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item._id);
+        console.log(specificElementIndex);
+
         this.createTasksUpdateForm(parsedData[specificElementIndex]);
+
+        console.log(parsedData[specificElementIndex]);
     }
 
     buttonClick(item: any) {
@@ -271,7 +246,14 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     private getDismissReason(reason: any): string {
-        console.log('getDismiss reason');
+        console.log('getDismissal reason');
+
+        this.milestonesForm.reset();
+        this.tasksForm.reset();
+        $("input").val("");
+        $("textarea").val("");
+        $(".error").hide();
+        
         if (reason === ModalDismissReasons.ESC) {
             return 'by pressing ESC';
         } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -283,7 +265,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     closeDialog() {
         this.modalService.dismissAll();
-    } 
+        console.log('closeDialog');
+
+    }
 
     onAddMilestones() {
         if (this.milestonesForm.valid) {
@@ -302,9 +286,21 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         if (this.tasksForm.valid) {
             this.tasksForm.controls['_id'].setValue(Math.floor(Math.random() * 90000) + 10000);
 
-            console.log(this.tasks);
-            console.log(this.tasksForm.value);
-            this.tasks?.push(this.tasksForm.value);
+            const tasks = [
+                {
+                    '_id' : this.tasksForm.controls['_id'].value,
+                    'title' :   this.tasksForm.controls['title'].value,
+                    'status'    :   this.tasksForm.controls['status'].value,
+                    'startDate' :   this.tasksForm.controls['startDate'].value,
+                    'milestones'    :   this.tasksForm.controls['milestones'].value,
+                    'endDate'   :   this.tasksForm.controls['endDate'].value,
+                    'assignee'  :   this.tasksForm.controls['assignee'].value,
+                    'bugs'  :   []
+                }
+            ];
+
+            console.log(tasks);
+            this.tasks?.push(tasks);
             console.log(this.tasks);
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
@@ -314,19 +310,16 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             // FInd the milestone realted with this task
             result = (localStorage.getItem('milestones'));
             let parsedData = JSON.parse(result);
-            console.log('parsedData', parsedData);
 
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
-            console.log('milestoneItem', milestoneItem);
-            // // update the table
-            this.result[milestoneItem].tasks?.push(this.tasksForm.value);
-            console.log('this.result', this.result);
-            
-            console.log('this.result.milestoneItem', this.result[milestoneItem]);
+            // update the table
+            console.log(tasks);
+            this.result[milestoneItem].tasks?.push(tasks);
+            console.log(this.result);
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
-            // this.tasksForm.reset();
+            this.tasksForm.reset();
         }
     }
 

@@ -65,15 +65,15 @@
                                                             <th scope="col">Status</th>
                                                             <th scope="col">Start Date</th>
                                                             <th scope="col">End Date</th>
-                                                            <th scope="col">Update</th>
+                                                            <th scope="col">Actions</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr *ngFor="let item of item.tasks;let i = index;"
+                                                    <tbody *ngIf="item.tasks">
+                                                        <tr *ngFor="let item of item?.tasks[0];let i = index;"
                                                             style="font-weight: 400;">
                                                             <th style="width: 40%;font-weight: 400;" scope="row">
                                                                 <ng-container
-                                                                    *ngIf="item.title.length > 40; else normalTitle;">
+                                                                    *ngIf="item?.title?.length > 40; else normalTitle;">
                                                                     {{item.title.slice(0, 40)}}...
                                                                 </ng-container>
 
@@ -112,6 +112,10 @@
                                                                 <button class="updateTasks-button"
                                                                     (click)="updateTasks(item);open(editTask);">
                                                                     <i class="fa fa-pencil"></i>
+                                                                </button>
+
+                                                                <button data-toggle="tooltip" data-placement="right" title="View Bugs related to this tasks." style="background: none; border: none;" routerLink="../tasks/{{item._id}}">
+                                                                    <i class="fa fa-info"></i>
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -498,3 +502,4 @@
 
     <hr>
 </div>
+

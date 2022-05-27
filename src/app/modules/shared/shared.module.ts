@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BugsComponent } from "../bugs/bugs.component";
+import { TaskComponent } from "../tasks/task/task.component";
 
 @NgModule({
     imports : [
@@ -11,10 +12,12 @@ import { BugsComponent } from "../bugs/bugs.component";
         ReactiveFormsModule
     ],
     declarations : [
-        BugsComponent
+        BugsComponent,
+        TaskComponent
     ],
     exports : [
-        BugsComponent
+        BugsComponent,
+        TaskComponent
     ]
 })
 

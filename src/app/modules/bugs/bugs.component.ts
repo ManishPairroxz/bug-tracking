@@ -14,9 +14,12 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     addBugForm: FormGroup;
     arrayOfData: any = [];
     result: any = [];
+    milestones: any = [];
+    tasks: any = [];
     currentStatus: any = '';
     bugClosed: boolean = false;
     formSubscription: any;
+    specifiElementIndex: any;
 
     constructor(public formBuilder: FormBuilder, public router: Router, private toastr: ToastrService) {
         this.addBugForm = this.formBuilder.group({
@@ -24,10 +27,10 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             'title': ['', [Validators.required, this.noWhitespaceValidator]],
             'assignee': ['', Validators.required],
             'priority': ['', Validators.required],
+            'milestones': ['', Validators.required],
+            'tasks': ['', Validators.required],
             'status': ['assinged']
         });
-
-
     }
 
     ngOnInit(): void {
@@ -37,6 +40,16 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
 
             result = (localStorage.getItem('arrayOfData'));
             this.result = JSON.parse(result);
+        }
+
+        if (localStorage.getItem('milestones')) {
+            let result: any = [];
+
+            result = localStorage.getItem('milestones');
+            // console.log(JSON.parse(result));
+
+            this.milestones = JSON.parse(result);
+            console.log(this.milestones);
         }
 
         $('#exampleModal').on('hidden.bs.modal', () => {
@@ -49,6 +62,38 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
 
     ngOnChanges(changes: SimpleChanges): void {
 
+    }
+
+    onSeeMilestone(event: any) {
+        console.log(event);
+
+        let result: any = [];
+        let parsedData: any = [];
+        let specificElementIndex: any;
+
+        if (event) {
+            result = this.milestones;
+            console.log(result);
+            // parsedData = JSON.parse(result);
+            // console.log(parsedData);
+
+            specificElementIndex = result.findIndex((x: any) => x._id == event.target.value);
+            console.log(specificElementIndex);
+            this.specifiElementIndex = specificElementIndex;
+            console.log(this.specifiElementIndex);
+
+            console.log(this.milestones[specificElementIndex]['tasks'][0]);
+            this.tasks = this.milestones[specificElementIndex]['tasks'][0];
+            console.log(this.tasks);
+
+
+            // this.result[specificElementIndex].title = event;
+            // localStorage.setItem('arrayOfData', JSON.stringify(this.result));
+        }
+    }
+
+    onSeeTasks(event: any) {
+        console.log(event);
     }
 
     changedValue(event: any, item: any) {
@@ -147,24 +192,14 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     }
 
     myFunction(item: any, event: any) {
-        // .classList.toggle("show")
         const element = document?.getElementById("myDropdown-" + item._id);
-        console.log(element?.id);
-
         const querySelector = document.querySelectorAll('.dropdown-content');
-        // console.log(querySelector);
-
         for (let i = 0; i <= querySelector.length - 1; i++) {
-            console.log(querySelector[i]);
-            console.log(querySelector[i].id);
             if (element?.id == querySelector[i].id) {
-                console.log('true');
-
                 element.classList.toggle('show');
             } else {
                 querySelector[i].classList.remove('show');
             }
-
         }
 
     }
@@ -176,14 +211,10 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     }
 
     updatePriority(item: any, value: any) {
-        console.log(item);
-        console.log(value);
-
         let result: any = [];
         let parsedData: any = [];
         let specificElementIndex: any;
 
-        console.log('closed');
         result = (localStorage.getItem('arrayOfData'));
         parsedData = JSON.parse(result);
         specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
@@ -191,7 +222,6 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
         // update operation
         this.result[specificElementIndex].priority = value;
         localStorage.setItem('arrayOfData', JSON.stringify(this.result));
-
     }
 
     onSubmit() {
@@ -202,9 +232,36 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             // save the previous data + new data & save it to loaclstorage
             this.result.push(this.addBugForm.value);
 
+            // Find the milestones & tasks related to the bug & do the entry in the respective tables
+            // FInd the milestone
+
+            console.log(this.specifiElementIndex);
+            console.log(this.milestones[this.specifiElementIndex])
+            
+
+            // Find the spcific tasks & push to the tasks
+            console.log(this.milestones[this.specifiElementIndex]['tasks'][0])
+            console.log(this.addBugForm.controls['tasks'].value);
+
+            let singleTask: any = [];
+            let parsedData: any = [];
+            let specificElementIndex: any;
+    
+            singleTask = (this.milestones[this.specifiElementIndex]['tasks'][0]);
+            parsedData = (singleTask);
+            specificElementIndex = parsedData.findIndex((x: any) => x._id == this.addBugForm.controls['tasks'].value);
+
+            singleTask[specificElementIndex]['bugs']?.push(this.addBugForm.value);
+            this.milestones[this.specifiElementIndex]['tasks'][specificElementIndex].bugs?.push(this.addBugForm.value);
+            // set the entry in the tasks table aslo
+
+
+            // this.milestones[this.specifiElementIndex]['tasks'][0].bugs?.push(this.addBugForm.value);
+
             localStorage.setItem('arrayOfData', JSON.stringify(this.result));
+            localStorage.setItem('milestones', JSON.stringify(this.milestones));
             this.toastr.success('Bug has been added successfully');
-            // close the modal & clear the form
+            // // // close the modal & clear the form
             $('#exampleModal').modal('hide');
             this.addBugForm.reset();
         }

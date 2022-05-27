@@ -6,7 +6,9 @@ import { AppComponent } from "./app.component";
 const routes: Routes = [
     { path: '', redirectTo: 'milestones', pathMatch: 'full' },
     { path: 'bugs', loadChildren : () => import('./modules/bugs/bugs.module').then(m => m.BugsModule) },
-    {   path:   'milestones',   loadChildren    :   ()  =>  import('./modules/milestones/milestones.module').then(m  =>  m.MilestonesModule)}
+    {   path:   'milestones',   loadChildren    :   ()  =>  import('./modules/milestones/milestones.module').then(m  =>  m.MilestonesModule)},
+    {   path    :   'tasks',    loadChildren    :   ()  =>  import('./modules/tasks/tasks.module').then(m => m.TasksModule)},
+    
 ];
 
 @NgModule({

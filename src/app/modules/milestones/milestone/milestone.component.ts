@@ -17,7 +17,7 @@ export class MileStoneComponent implements OnInit, OnDestroy, AfterViewInit, OnC
     }
 
     ngOnInit(): void {
-        console.log('ngOnInit milestone');
+         
     }
 
     ngOnChanges(changes: SimpleChanges): void {
