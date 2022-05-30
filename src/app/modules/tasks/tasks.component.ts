@@ -8,10 +8,10 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 
 export class TasksComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
-        console.log('oninit tasks');
+         
     }
 
     ngOnDestroy(): void {
-        console.log('ondestroy tasks');
+         
     }
 }

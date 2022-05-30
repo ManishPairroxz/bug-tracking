@@ -224,7 +224,7 @@
                             <label for="">Assignee*</label>
                             <select id="assigneeSelect" class="form-select" aria-placeholder="Assignee"
                                 formControlName="assignee">
-                                <option value="developer" selected>Develoepr</option>
+                                <option value="developer" selected>Developer</option>
                                 <!-- <option value="tester">Tester</option>
                   <option value="client">Client</option> -->
                             </select>
@@ -257,7 +257,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="">Milestone*</label>
+                            <label for="">Milestone</label>
                             <select id="milestoneSelect" class="form-select" aria-placeholder="Milestone"
                                 formControlName="milestones" (change)="onSeeMilestone($event)">
                                 <option *ngFor="let item of milestones; let i = index;" [value]="item._id">
@@ -265,17 +265,10 @@
                                 </option>
                             </select>
 
-                            <div class="error"
-                                *ngIf="addBugForm.controls['milestones'].touched && addBugForm.controls['milestones'].errors">
-                                <div *ngIf="addBugForm.controls['milestones'].errors['required']">
-                                    Milestone field is required.
-                                </div>
-                            </div>
-
                         </div>
 
                         <div class="mb-3">
-                            <label for="">Tasks*</label>
+                            <label for="">Tasks</label>
                             <select id="tasksSelect" class="form-select" aria-placeholder="Tasks"
                                 formControlName="tasks" (change)="onSeeTasks($event)">
                                 <option value="" disabled>Please select Milestones first</option>
@@ -283,13 +276,6 @@
                                     {{item.title}}
                                 </option>
                             </select>
-
-                            <div class="error"
-                                *ngIf="addBugForm.controls['tasks'].touched && addBugForm.controls['tasks'].errors">
-                                <div *ngIf="addBugForm.controls['tasks'].errors['required']">
-                                    Milestone field is required.
-                                </div>
-                            </div>
 
                         </div>
                     </form>

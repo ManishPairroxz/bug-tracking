@@ -27,8 +27,8 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             'title': ['', [Validators.required, this.noWhitespaceValidator]],
             'assignee': ['', Validators.required],
             'priority': ['', Validators.required],
-            'milestones': ['', Validators.required],
-            'tasks': ['', Validators.required],
+            'milestones': [''],
+            'tasks': [''],
             'status': ['assinged']
         });
     }
@@ -46,10 +46,10 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             let result: any = [];
 
             result = localStorage.getItem('milestones');
-            // console.log(JSON.parse(result));
+            //  
 
             this.milestones = JSON.parse(result);
-            console.log(this.milestones);
+             
         }
 
         $('#exampleModal').on('hidden.bs.modal', () => {
@@ -65,7 +65,7 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     }
 
     onSeeMilestone(event: any) {
-        console.log(event);
+         
 
         let result: any = [];
         let parsedData: any = [];
@@ -73,18 +73,18 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
 
         if (event) {
             result = this.milestones;
-            console.log(result);
+             
             // parsedData = JSON.parse(result);
-            // console.log(parsedData);
+            //  
 
             specificElementIndex = result.findIndex((x: any) => x._id == event.target.value);
-            console.log(specificElementIndex);
+             
             this.specifiElementIndex = specificElementIndex;
-            console.log(this.specifiElementIndex);
+             
 
-            console.log(this.milestones[specificElementIndex]['tasks'][0]);
+             
             this.tasks = this.milestones[specificElementIndex]['tasks'][0];
-            console.log(this.tasks);
+             
 
 
             // this.result[specificElementIndex].title = event;
@@ -93,7 +93,7 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     }
 
     onSeeTasks(event: any) {
-        console.log(event);
+         
     }
 
     changedValue(event: any, item: any) {
@@ -235,13 +235,13 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             // Find the milestones & tasks related to the bug & do the entry in the respective tables
             // FInd the milestone
 
-            console.log(this.specifiElementIndex);
-            console.log(this.milestones[this.specifiElementIndex])
+             
+             
             
 
             // Find the spcific tasks & push to the tasks
-            console.log(this.milestones[this.specifiElementIndex]['tasks'][0])
-            console.log(this.addBugForm.controls['tasks'].value);
+             
+             
 
             let singleTask: any = [];
             let parsedData: any = [];

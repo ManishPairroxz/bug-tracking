@@ -55,7 +55,7 @@
                                     class="no-show">
                                     <ng-container *ngIf="item.tasks">
                                         <div class="card">
-
+                                            <!-- {{item.tasks | json}} -->
                                             <div class="card-body py-0">
                                                 <table class="table py-0 m-0">
                                                     <thead>
@@ -69,23 +69,25 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody *ngIf="item.tasks">
-                                                        <tr *ngFor="let item of item?.tasks[0];let i = index;"
+                                                        <tr *ngFor="let item of item?.tasks;let i = index;"
                                                             style="font-weight: 400;">
                                                             <th style="width: 40%;font-weight: 400;" scope="row">
+                                                                <!-- {{item | json}} -->
+                                                                <!-- {{item[0] | json}} -->
                                                                 <ng-container
                                                                     *ngIf="item?.title?.length > 40; else normalTitle;">
-                                                                    {{item.title.slice(0, 40)}}...
+                                                                    {{item[0].title.slice(0, 40)}}...
                                                                 </ng-container>
 
                                                                 <ng-template #normalTitle>
-                                                                    {{item.title}}
+                                                                    {{item[0].title}}
                                                                 </ng-template>
 
                                                             </th>
-                                                            <ng-container *ngIf="item.assignee">
+                                                            <ng-container *ngIf="item[0].assignee">
                                                                 <td class="d-flex justify-content-between">
                                                                     <span
-                                                                        *ngFor="let item of item.assignee; let i = index;">
+                                                                        *ngFor="let item of item[0].assignee; let i = index;">
                                                                         <div style="
                                                                         border-radius: 100%;
                                                                         width: 35px;
@@ -103,10 +105,10 @@
 
                                                                 </td>
                                                             </ng-container>
-                                                            <td>{{item.status}}</td>
-                                                            <td *ngIf="item.startDate">{{item.startDate |
+                                                            <td>{{item[0].status}}</td>
+                                                            <td *ngIf="item[0].startDate">{{item[0].startDate |
                                                                 customDatePipe}}</td>
-                                                            <td *ngIf="item.endDate">{{item.endDate | customDatePipe}}
+                                                            <td *ngIf="item[0].endDate">{{item[0].endDate | customDatePipe}}
                                                             </td>
                                                             <td>
                                                                 <!-- <button class="updateTasks-button"
@@ -114,7 +116,7 @@
                                                                     <i class="fa fa-pencil"></i>
                                                                 </button> -->
 
-                                                                <button data-toggle="tooltip" data-placement="right" title="View Bugs related to this tasks." style="background: none; border: none;" routerLink="../tasks/{{item._id}}">
+                                                                <button data-toggle="tooltip" data-placement="right" title="View Bugs related to this tasks." style="background: none; border: none;" routerLink="../tasks/{{item[0]._id}}">
                                                                     <i class="fa fa-info"></i>
                                                                 </button>
                                                             </td>
@@ -291,9 +293,9 @@
                     </div>
 
                     <div class="error"
-                        *ngIf="tasksForm.controls['status'].touched && tasksForm.controls['status'].errors">
-                        <div *ngIf="tasksForm.controls['status'].errors['required']">
-                            Status field is required.
+                        *ngIf="tasksForm.controls['milestones'].touched && tasksForm.controls['milestones'].errors">
+                        <div *ngIf="tasksForm.controls['milestones'].errors['required']">
+                            Milestone field is required.
                         </div>
                     </div>
                 </div>

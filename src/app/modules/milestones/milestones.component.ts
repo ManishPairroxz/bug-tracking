@@ -85,10 +85,11 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
             this.result = JSON.parse(result);
             console.log(this.result);
+             
             this.tasks = JSON.parse(localTasks);
             if(!this.tasks) {
                 this.tasks = [];
-                console.log(this.tasks);
+                 
             }
         }
 
@@ -117,7 +118,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     createTasksUpdateForm(userData: any) {
-        console.log(userData);
+         
 
         let _id = '';
         let title = '';
@@ -166,7 +167,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     open(content: any) {
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
             this.closeResult = `Closed with: ${result}`;
-            console.log(this.closeResult);
+             
         }, (reason) => {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
@@ -208,14 +209,14 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let parsedData: any = [];
         result = localStorage.getItem('tasks');
         parsedData = JSON.parse(result);
-        console.log(parsedData);
+         
 
         specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item._id);
-        console.log(specificElementIndex);
+         
 
         this.createTasksUpdateForm(parsedData[specificElementIndex]);
 
-        console.log(parsedData[specificElementIndex]);
+         
     }
 
     buttonClick(item: any) {
@@ -246,7 +247,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     private getDismissReason(reason: any): string {
-        console.log('getDismissal reason');
+         
 
         this.milestonesForm.reset();
         this.tasksForm.reset();
@@ -265,7 +266,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     closeDialog() {
         this.modalService.dismissAll();
-        console.log('closeDialog');
+         
 
     }
 
@@ -299,9 +300,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
                 }
             ];
 
-            console.log(tasks);
+             
             this.tasks?.push(tasks);
-            console.log(this.tasks);
+             
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             let result: any = [];
@@ -313,9 +314,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
             // update the table
-            console.log(tasks);
+             
             this.result[milestoneItem].tasks?.push(tasks);
-            console.log(this.result);
+             
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
