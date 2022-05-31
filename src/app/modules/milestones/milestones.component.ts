@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { ToastrService } from "ngx-toastr";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import * as moment from "moment";
+import { findIndex } from "rxjs";
 declare var $: any;
 
 @Component({
@@ -207,21 +208,17 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let specificElementIndex;
         let result: any = [];
         let parsedData: any = [];
-        result = localStorage.getItem('tasks');
-        parsedData = JSON.parse(result);
-        console.log(parsedData);  
-        console.log(item);       
-        console.log(item[0]._id);
         
-        parsedData.forEach((element : any, key : any)   =>  {
-            console.log( element[0]['_id'] );
-            console.log( element[0]['_id'] == item[0]._id );
-        })
-         
-        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
-        console.log(specificElementIndex);
-        console.log(parsedData[specificElementIndex][0]);
-        this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
+        // Pick data from milestone table instead of tasks table
+            // Find milestone realted to the task
+            result = localStorage.getItem('milestones');
+            parsedData = JSON.parse(result);
+            console.log(parsedData);
+
+            
+            // specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
+
+        // this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
 
          
     }
@@ -335,6 +332,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
             this.tasksForm.reset();
+            window.location.reload();
         }
     }
 

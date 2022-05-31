@@ -235,24 +235,27 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             // Find the milestones & tasks related to the bug & do the entry in the respective tables
             // FInd the milestone
 
-             
-             
-            
-
             // Find the spcific tasks & push to the tasks
-             
-             
 
             let singleTask: any = [];
             let parsedData: any = [];
             let specificElementIndex: any;
     
-            singleTask = (this.milestones[this.specifiElementIndex]['tasks'][0]);
+            if(this.milestones[this.specifiElementIndex])   {
+                singleTask = (this.milestones[this.specifiElementIndex]['tasks'][0]);
+
+            }
             parsedData = (singleTask);
             specificElementIndex = parsedData.findIndex((x: any) => x._id == this.addBugForm.controls['tasks'].value);
 
-            singleTask[specificElementIndex]['bugs']?.push(this.addBugForm.value);
-            this.milestones[this.specifiElementIndex]['tasks'][specificElementIndex].bugs?.push(this.addBugForm.value);
+            if(singleTask[specificElementIndex])    {
+                singleTask[specificElementIndex]['bugs']?.push(this.addBugForm.value);
+
+            }
+            if(this.milestones[this.specifiElementIndex])   {
+                this.milestones[this.specifiElementIndex]['tasks'][specificElementIndex].bugs?.push(this.addBugForm.value);
+
+            }
             // set the entry in the tasks table aslo
 
 
