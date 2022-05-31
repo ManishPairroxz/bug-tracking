@@ -118,8 +118,8 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     createTasksUpdateForm(userData: any) {
-         
-
+        
+        console.log(userData);
         let _id = '';
         let title = '';
         let assignee = '';
@@ -128,28 +128,28 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let startDate = '';
         let endDate = '';
 
-        if (typeof (userData[0]._id) != 'undefined') {
-            _id = userData[0]._id;
+        if (typeof (userData._id) != 'undefined') {
+            _id = userData._id;
 
         }
-        if (typeof (userData[0].title) != 'undefined') {
-            title = userData[0].title;
+        if (typeof (userData.title) != 'undefined') {
+            title = userData.title;
 
         }
-        if (typeof (userData[0].assignee) != 'undefined') {
-            assignee = userData[0].assignee;
+        if (typeof (userData.assignee) != 'undefined') {
+            assignee = userData.assignee;
         }
-        if (typeof (userData[0].status) != 'undefined') {
-            status = userData[0].status;
+        if (typeof (userData.status) != 'undefined') {
+            status = userData.status;
         }
-        if (typeof (userData[0].milestones) != 'undefined') {
-            milestones = userData[0].milestones;
+        if (typeof (userData.milestones) != 'undefined') {
+            milestones = userData.milestones;
         }
-        if (typeof (userData[0].startDate) != 'undefined') {
-            startDate = userData[0].startDate;
+        if (typeof (userData.startDate) != 'undefined') {
+            startDate = userData.startDate;
         }
-        if (typeof (userData[0].endDate) != 'undefined') {
-            endDate = userData[0].endDate;
+        if (typeof (userData.endDate) != 'undefined') {
+            endDate = userData.endDate;
         }
 
         this.editTasksForm = this.formBuilder.group({
@@ -209,12 +209,19 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let parsedData: any = [];
         result = localStorage.getItem('tasks');
         parsedData = JSON.parse(result);
+        console.log(parsedData);  
+        console.log(item);       
+        console.log(item[0]._id);
+        
+        parsedData.forEach((element : any, key : any)   =>  {
+            console.log( element[0]['_id'] );
+            console.log( element[0]['_id'] == item[0]._id );
+        })
          
-
-        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item._id);
-         
-
-        this.createTasksUpdateForm(parsedData[specificElementIndex]);
+        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
+        console.log(specificElementIndex);
+        console.log(parsedData[specificElementIndex][0]);
+        this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
 
          
     }
@@ -266,8 +273,6 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     closeDialog() {
         this.modalService.dismissAll();
-         
-
     }
 
     onAddMilestones() {
@@ -300,22 +305,31 @@ export class MilestonesComponent implements OnInit, OnDestroy {
                 }
             ];
 
+            console.log(this.tasks);
+            console.log(tasks);
              
             this.tasks?.push(tasks);
+            console.log(this.tasks);
              
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             let result: any = [];
+            console.log(result);
 
             // Find the milestone realted with the tasks & update the table
             // FInd the milestone realted with this task
             result = (localStorage.getItem('milestones'));
             let parsedData = JSON.parse(result);
+            console.log(parsedData);
 
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
-            // update the table
+            console.log(milestoneItem);
+            console.log(this.result[milestoneItem]);
+            
+            // // update the table
              
             this.result[milestoneItem].tasks?.push(tasks);
+            console.log(this.result[milestoneItem]);
              
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
@@ -327,7 +341,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     onEditTasks() {
 
         if (this.editTasksForm.valid) {
-            let specificElementIndex;
+            let specificElementIndex : number;
             let parsedData: any = [];
             let result: any = [];
 
@@ -336,6 +350,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             specificElementIndex = parsedData.findIndex((x: any) => x._id == this.editTasksForm.value._id);
             parsedData[specificElementIndex] = this.editTasksForm.value;
             this.tasks[specificElementIndex] = this.editTasksForm.value;
+            console.log(this.editTasksForm.value);
+            console.log(this.tasks[specificElementIndex]);
+            console.log(this.tasks)
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             // update the item in milestones table also
@@ -348,7 +365,19 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             let milestoneItem = milestonesParsedData.findIndex((x: any) => x._id == this.editTasksForm.get('milestones')?.value);
 
             // update the table
-            this.result[milestoneItem].tasks = this.editTasksForm.value;
+            console.log(this.result[milestoneItem].tasks);
+            this.result[milestoneItem].tasks.forEach((element   :   any, key    :   any) => {
+                console.log(element[0]._id);
+                console.log(this.tasks[specificElementIndex]._id);
+                console.log(element[0]._id == this.tasks[specificElementIndex]._id);
+            })
+
+            console.log();
+            let tasksIndex = this.result[milestoneItem].tasks.findIndex((x : any) => x[0]._id == this.tasks[specificElementIndex]._id);
+            console.log(this.result[milestoneItem].tasks[tasksIndex][0]);
+            this.result[milestoneItem].tasks[tasksIndex][0] = this.editTasksForm.value;
+            // this.result[milestoneItem].tasks?.push(this.editTasksForm.value);
+            // console.log(this.result);
             localStorage.setItem('milestones', JSON.stringify(this.result));
 
             this.toastr.success('Tasks has been updated successfully');
