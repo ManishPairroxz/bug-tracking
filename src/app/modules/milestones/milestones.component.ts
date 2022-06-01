@@ -27,7 +27,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     model: any;
     date: any = {};
     public isCollapsed = true;
-    public isTasksCollapesed    :   boolean =   true;
+    public isTasksCollapesed: boolean = true;
 
     isToggle: boolean = false;
     isDisabled: boolean = false;
@@ -37,7 +37,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     public startDate: any;
     public endDate: any;
     public isEndDateSmaller: boolean = false;
-    public showTasks    :   boolean =   false;
+    public showTasks: boolean = false;
 
     constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private calendar: NgbCalendar) {
         this.milestonesForm = this.formBuilder.group({
@@ -84,12 +84,12 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             localTasks = localStorage.getItem('tasks');
 
             this.result = JSON.parse(result);
-              
-             
+
+
             this.tasks = JSON.parse(localTasks);
-            if(!this.tasks) {
+            if (!this.tasks) {
                 this.tasks = [];
-                 
+
             }
         }
 
@@ -118,8 +118,8 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     }
 
     createTasksUpdateForm(userData: any) {
-        
-          
+
+
         let _id = '';
         let title = '';
         let assignee = '';
@@ -164,12 +164,14 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     }
 
-    open(content: any) {
+    open(content: any, name: any) {
+        console.log(content);
+        console.log(name);
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
             this.closeResult = `Closed with: ${result}`;
-             
+
         }, (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+            this.closeResult = `Dismissed ${this.getDismissReason(reason, name)}`;
         });
     }
 
@@ -209,21 +211,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let parsedData: any = [];
         result = localStorage.getItem('tasks');
         parsedData = JSON.parse(result);
-          
-          
-          
-        
-        parsedData.forEach((element : any, key : any)   =>  {
-              
-              
-        })
-         
-        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
-          
-          
-        this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
 
-         
+        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
+        this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
     }
 
     buttonClick(item: any) {
@@ -253,21 +243,39 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         return isValid ? null : { 'whitespace': true };
     }
 
-    private getDismissReason(reason: any): string {
-         
+    private getDismissReason(reason: any, name: any): void {
+        console.log(reason);
+        console.log(name);
 
-        this.milestonesForm.reset();
-        this.tasksForm.reset();
+        if (name == 'milestones') {
+            // this.milestonesForm.reset();
+            this.milestonesForm.markAsUntouched()
+            console.log('milestones')
+            this.tasksForm.reset();
+            $("input").val("");
+            $("textarea").val("");
+            $(".error").hide();
+            this.milestonesForm.controls['title'].reset();
+            this.milestonesForm.controls['status'].reset();
+        } else if (name == 'tasks') {
+            this.tasksForm.reset();
+        }
+
         $("input").val("");
         $("textarea").val("");
         $(".error").hide();
-        
-        if (reason === ModalDismissReasons.ESC) {
-            return 'by pressing ESC';
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return 'by clicking on a backdrop';
+
+        if (reason === ModalDismissReasons.ESC || reason === ModalDismissReasons.BACKDROP_CLICK) {
+            // return 'by pressing ESC';
+            console.log('yes')
+
         } else {
-            return `with: ${reason}`;
+            console.log('no');
+            // this.milestonesForm.reset();
+            // this.tasksForm.reset();
+            // $("input").val("");
+            // $("textarea").val("");
+            // $(".error").hide();
         }
     }
 
@@ -294,43 +302,31 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
             const tasks = [
                 {
-                    '_id' : this.tasksForm.controls['_id'].value,
-                    'title' :   this.tasksForm.controls['title'].value,
-                    'status'    :   this.tasksForm.controls['status'].value,
-                    'startDate' :   this.tasksForm.controls['startDate'].value,
-                    'milestones'    :   this.tasksForm.controls['milestones'].value,
-                    'endDate'   :   this.tasksForm.controls['endDate'].value,
-                    'assignee'  :   this.tasksForm.controls['assignee'].value,
-                    'bugs'  :   []
+                    '_id': this.tasksForm.controls['_id'].value,
+                    'title': this.tasksForm.controls['title'].value,
+                    'status': this.tasksForm.controls['status'].value,
+                    'startDate': this.tasksForm.controls['startDate'].value,
+                    'milestones': this.tasksForm.controls['milestones'].value,
+                    'endDate': this.tasksForm.controls['endDate'].value,
+                    'assignee': this.tasksForm.controls['assignee'].value,
+                    'bugs': []
                 }
             ];
 
-              
-              
-             
             this.tasks?.push(tasks);
-              
-             
-
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             let result: any = [];
-              
 
             // Find the milestone realted with the tasks & update the table
             // FInd the milestone realted with this task
             result = (localStorage.getItem('milestones'));
             let parsedData = JSON.parse(result);
-              
+
 
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
-              
-              
-            
             // // update the table
-             
             this.result[milestoneItem].tasks?.push(tasks);
-              
-             
+
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
@@ -341,21 +337,21 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     onEditTasks() {
 
         if (this.editTasksForm.valid) {
-              
-            let specificElementIndex : number;
+
+            let specificElementIndex: number;
             let parsedData: any = [];
             let result: any = [];
 
             result = localStorage.getItem('tasks');
             parsedData = JSON.parse(result);
 
-              
+
             // specificElementIndex = parsedData.findIndex((x: any) => x._id == this.editTasksForm.value._id);
             // parsedData[specificElementIndex] = this.editTasksForm.value;
             // this.tasks[specificElementIndex] = this.editTasksForm.value;
 
             // localStorage.setItem('tasks', JSON.stringify(this.tasks));
-            
+
 
             // this.toastr.success('Tasks has been updated successfully');
             // this.closeDialog();

@@ -31,9 +31,9 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <button class="btn btn-primary normal-button-open" (click)="open(content)">+ Add a
+                        <button class="btn btn-primary normal-button-open" (click)="open(content, 'milestones')">+ Add a
                             Milestone</button>
-                        <button class="btn btn-primary normal-button-open m-2" (click)="open(task)">+ Add a
+                        <button class="btn btn-primary normal-button-open m-2" (click)="open(task, 'tasks')">+ Add a
                             Task</button>
                     </tr>
                     <tr *ngFor="let item of result; let i = index;">

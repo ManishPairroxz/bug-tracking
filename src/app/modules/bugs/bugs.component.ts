@@ -46,10 +46,7 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
             let result: any = [];
 
             result = localStorage.getItem('milestones');
-            //  
-
-            this.milestones = JSON.parse(result);
-             
+            this.milestones = JSON.parse(result);   
         }
 
         $('#exampleModal').on('hidden.bs.modal', () => {
@@ -65,8 +62,6 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
     }
 
     onSeeMilestone(event: any) {
-         
-
         let result: any = [];
         let parsedData: any = [];
         let specificElementIndex: any;
@@ -76,17 +71,9 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
              
             // parsedData = JSON.parse(result);
             //  
-
             specificElementIndex = result.findIndex((x: any) => x._id == event.target.value);
-             
             this.specifiElementIndex = specificElementIndex;
-             
-
-             
             this.tasks = this.milestones[specificElementIndex]['tasks'][0];
-             
-
-
             // this.result[specificElementIndex].title = event;
             // localStorage.setItem('arrayOfData', JSON.stringify(this.result));
         }
