@@ -41,21 +41,32 @@
                         <th scope="row">
                             <div class="row">
                                 <button type="button" class="btn btn-outline-primary normal-button"
+                                [disabled]="item?.tasks?.length <= 0"
                                     (click)="collapse.toggle();buttonClick(item);"
-                                    [attr.aria-expanded]="item.tasks && (item['_id'] == isCollapsed)"
+                                    [attr.aria-expanded]="(item['_id'] == isCollapsed)"
                                     aria-controls="collapseExample">
                                     <span> <i
                                             [class]="item.tasks && (item['_id'] == isCollapsed) ? 'fa fa-arrow-down' : 'fa fa-arrow-right' "></i>
-                                    </span> {{item.title}}
+                                    </span> 
+                                    <ng-container   *ngIf="item.title.length > 60;else normalTitle;">
+                                        {{item.title.slice(0,60)}}...
+                                    </ng-container>
+                                    <ng-template    #normalTitle>
+                                        {{item.title}}
+                                    </ng-template>
                                 </button>
                             </div>
 
+                            <!-- {{item.tasks | json}}
+                            <br>
+                            {{item.tasks.length}}
+                            <br>
+                            {{item.tasks.length > 0}} -->
                             <div class="row">
                                 <div #collapse="ngbCollapse" [(ngbCollapse)]="item['_id'] != isCollapsed"
                                     class="no-show">
                                     <ng-container *ngIf="item.tasks">
                                         <div class="card">
-                                            <!-- {{item.tasks | json}} -->
                                             <div class="card-body py-0">
                                                 <table class="table py-0 m-0">
                                                     <thead>
@@ -72,8 +83,6 @@
                                                         <tr *ngFor="let item of item?.tasks;let i = index;"
                                                             style="font-weight: 400;">
                                                             <th style="width: 40%;font-weight: 400;" scope="row">
-                                                                <!-- {{item | json}} -->
-                                                                <!-- {{item[0] | json}} -->
                                                                 <ng-container
                                                                     *ngIf="item?.title?.length > 40; else normalTitle;">
                                                                     {{item[0].title.slice(0, 40)}}...
@@ -105,7 +114,7 @@
 
                                                                 </td>
                                                             </ng-container>
-                                                            <td>{{item[0].status}}</td>
+                                                            <td>{{item[0].status | statusPipe}}</td>
                                                             <td *ngIf="item[0].startDate">{{item[0].startDate |
                                                                 customDatePipe}}</td>
                                                             <td *ngIf="item[0].endDate">{{item[0].endDate | customDatePipe}}
@@ -169,11 +178,10 @@
                     </div>
                 </div>
 
-                <div class="p-1">
+                <!-- <div class="p-1">
                     <label for="dateOfBirth" class="py-2">Description</label>
                     <div class="input-group">
                         <textarea type="text" class="form-control" formControlName="description"></textarea>
-                        <!-- <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button> -->
                     </div>
 
                     <div class="error"
@@ -182,7 +190,7 @@
                             Description field is required.
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="p-1">
                     <label for="dateOfBirth" class="py-2">Status</label>
@@ -287,7 +295,13 @@
                     <label for="milestone" class="py-2">Milestone</label>
                     <div class="input-group">
                         <select id="milestonesSelect" class="form-select" formControlName="milestones">
-                            <option *ngFor="let item of result; let i = index;" value="{{item._id}}">{{item.title}}
+                            <option *ngFor="let item of result; let i = index;" value="{{item._id}}">
+                                <ng-container   *ngIf="item.title.length > 58;else normalTitle;">
+                                    {{item.title.slice(0,58)}}...
+                                </ng-container>
+                                <ng-template    #normalTitle>
+                                    {{item.title}}
+                                </ng-template>
                             </option>
                         </select>
                     </div>

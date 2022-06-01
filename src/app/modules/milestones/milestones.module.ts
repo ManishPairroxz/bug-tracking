@@ -8,10 +8,11 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { NgxEditInlineModule } from "ngx-edit-inline";
 import { ToastrModule } from "ngx-toastr";
 import { BugsComponent } from "../bugs/bugs.component";
-import { CustomDatePipe } from "../pipes/custom-date-pipe";
+import { CustomDatePipe } from "../../pipes/custom-date-pipe";
 import { SharedModule } from "../shared/shared.module";
 import { MileStoneComponent } from "./milestone/milestone.component";
 import { MilestonesComponent } from "./milestones.component";
+import { StatusPipeTransform } from "../../pipes/statusPipe";
 
 const mileStonesRouting = RouterModule.forChild([
     { path: '', component: MilestonesComponent },
@@ -34,7 +35,8 @@ const mileStonesRouting = RouterModule.forChild([
     ],
     declarations: [
         MilestonesComponent,
-        CustomDatePipe
+        CustomDatePipe,
+        StatusPipeTransform
     ],
     exports: [RouterModule]
 })

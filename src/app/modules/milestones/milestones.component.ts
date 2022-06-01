@@ -43,7 +43,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         this.milestonesForm = this.formBuilder.group({
             _id: new FormControl(''),
             title: new FormControl('', [Validators.required, this.noWhitespaceValidator]),
-            description: new FormControl('', [Validators.required]),
+            // description: new FormControl('', [Validators.required]),
             status: new FormControl('', [Validators.required]),
             tasks: new FormControl([])
             // dueDate :   new FormControl({'year': 2018, 'month': 12, 'day': 12}, [Validators.required])
@@ -84,7 +84,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             localTasks = localStorage.getItem('tasks');
 
             this.result = JSON.parse(result);
-            console.log(this.result);
+              
              
             this.tasks = JSON.parse(localTasks);
             if(!this.tasks) {
@@ -119,7 +119,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
 
     createTasksUpdateForm(userData: any) {
         
-        console.log(userData);
+          
         let _id = '';
         let title = '';
         let assignee = '';
@@ -209,18 +209,18 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let parsedData: any = [];
         result = localStorage.getItem('tasks');
         parsedData = JSON.parse(result);
-        console.log(parsedData);  
-        console.log(item);       
-        console.log(item[0]._id);
+          
+          
+          
         
         parsedData.forEach((element : any, key : any)   =>  {
-            console.log( element[0]['_id'] );
-            console.log( element[0]['_id'] == item[0]._id );
+              
+              
         })
          
         specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
-        console.log(specificElementIndex);
-        console.log(parsedData[specificElementIndex][0]);
+          
+          
         this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
 
          
@@ -284,7 +284,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.toastr.success('Milestone has been added successfully');
             this.closeDialog();
             this.milestonesForm.reset();
-            location.reload();
+            window.location.reload();
         }
     }
 
@@ -305,31 +305,31 @@ export class MilestonesComponent implements OnInit, OnDestroy {
                 }
             ];
 
-            console.log(this.tasks);
-            console.log(tasks);
+              
+              
              
             this.tasks?.push(tasks);
-            console.log(this.tasks);
+              
              
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             let result: any = [];
-            console.log(result);
+              
 
             // Find the milestone realted with the tasks & update the table
             // FInd the milestone realted with this task
             result = (localStorage.getItem('milestones'));
             let parsedData = JSON.parse(result);
-            console.log(parsedData);
+              
 
             let milestoneItem = parsedData.findIndex((x: any) => x._id == this.tasksForm.get('milestones')?.value);
-            console.log(milestoneItem);
-            console.log(this.result[milestoneItem]);
+              
+              
             
             // // update the table
              
             this.result[milestoneItem].tasks?.push(tasks);
-            console.log(this.result[milestoneItem]);
+              
              
             localStorage.setItem('milestones', JSON.stringify(this.result));
             this.toastr.success('Tasks has been added successfully');
@@ -341,22 +341,25 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     onEditTasks() {
 
         if (this.editTasksForm.valid) {
+              
             let specificElementIndex : number;
             let parsedData: any = [];
             let result: any = [];
 
             result = localStorage.getItem('tasks');
             parsedData = JSON.parse(result);
-            specificElementIndex = parsedData.findIndex((x: any) => x._id == this.editTasksForm.value._id);
-            parsedData[specificElementIndex] = this.editTasksForm.value;
-            this.tasks[specificElementIndex] = this.editTasksForm.value;
 
-            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+              
+            // specificElementIndex = parsedData.findIndex((x: any) => x._id == this.editTasksForm.value._id);
+            // parsedData[specificElementIndex] = this.editTasksForm.value;
+            // this.tasks[specificElementIndex] = this.editTasksForm.value;
+
+            // localStorage.setItem('tasks', JSON.stringify(this.tasks));
             
 
-            this.toastr.success('Tasks has been updated successfully');
-            this.closeDialog();
-            this.tasksForm.reset();
+            // this.toastr.success('Tasks has been updated successfully');
+            // this.closeDialog();
+            // this.tasksForm.reset();
         }
     }
 
