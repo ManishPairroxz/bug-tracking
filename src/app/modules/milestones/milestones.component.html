@@ -111,10 +111,10 @@
                                                             <td *ngIf="item[0].endDate">{{item[0].endDate | customDatePipe}}
                                                             </td>
                                                             <td>
-                                                                <!-- <button class="updateTasks-button"
+                                                                <button class="updateTasks-button"
                                                                     (click)="updateTasks(item);open(editTask);">
                                                                     <i class="fa fa-pencil"></i>
-                                                                </button> -->
+                                                                </button>
 
                                                                 <button data-toggle="tooltip" data-placement="right" title="View Bugs related to this tasks." style="background: none; border: none;" routerLink="../tasks/{{item[0]._id}}">
                                                                     <i class="fa fa-info"></i>

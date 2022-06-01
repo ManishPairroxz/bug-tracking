@@ -6,7 +6,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { ToastrService } from "ngx-toastr";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import * as moment from "moment";
-import { findIndex } from "rxjs";
 declare var $: any;
 
 @Component({
@@ -208,17 +207,21 @@ export class MilestonesComponent implements OnInit, OnDestroy {
         let specificElementIndex;
         let result: any = [];
         let parsedData: any = [];
+        result = localStorage.getItem('tasks');
+        parsedData = JSON.parse(result);
+        console.log(parsedData);  
+        console.log(item);       
+        console.log(item[0]._id);
         
-        // Pick data from milestone table instead of tasks table
-            // Find milestone realted to the task
-            result = localStorage.getItem('milestones');
-            parsedData = JSON.parse(result);
-            console.log(parsedData);
-
-            
-            // specificElementIndex = parsedData.findIndex((x: any) => x._id == item._id);
-
-        // this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
+        parsedData.forEach((element : any, key : any)   =>  {
+            console.log( element[0]['_id'] );
+            console.log( element[0]['_id'] == item[0]._id );
+        })
+         
+        specificElementIndex = parsedData.findIndex((x: any) => x[0]._id == item[0]._id);
+        console.log(specificElementIndex);
+        console.log(parsedData[specificElementIndex][0]);
+        this.createTasksUpdateForm(parsedData[specificElementIndex][0]);
 
          
     }
@@ -332,7 +335,6 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             this.toastr.success('Tasks has been added successfully');
             this.closeDialog();
             this.tasksForm.reset();
-            window.location.reload();
         }
     }
 
@@ -348,35 +350,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             specificElementIndex = parsedData.findIndex((x: any) => x._id == this.editTasksForm.value._id);
             parsedData[specificElementIndex] = this.editTasksForm.value;
             this.tasks[specificElementIndex] = this.editTasksForm.value;
-            console.log(this.editTasksForm.value);
-            console.log(this.tasks[specificElementIndex]);
-            console.log(this.tasks)
 
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
-            // update the item in milestones table also
-            // Find the milestone realted with the tasks & update the table
-
-            // FInd the milestone realted with this task
-            let milestonesParsedData: any = [];
-            result = (localStorage.getItem('milestones'));
-            milestonesParsedData = JSON.parse(result);
-            let milestoneItem = milestonesParsedData.findIndex((x: any) => x._id == this.editTasksForm.get('milestones')?.value);
-
-            // update the table
-            console.log(this.result[milestoneItem].tasks);
-            this.result[milestoneItem].tasks.forEach((element   :   any, key    :   any) => {
-                console.log(element[0]._id);
-                console.log(this.tasks[specificElementIndex]._id);
-                console.log(element[0]._id == this.tasks[specificElementIndex]._id);
-            })
-
-            console.log();
-            let tasksIndex = this.result[milestoneItem].tasks.findIndex((x : any) => x[0]._id == this.tasks[specificElementIndex]._id);
-            console.log(this.result[milestoneItem].tasks[tasksIndex][0]);
-            this.result[milestoneItem].tasks[tasksIndex][0] = this.editTasksForm.value;
-            // this.result[milestoneItem].tasks?.push(this.editTasksForm.value);
-            // console.log(this.result);
-            localStorage.setItem('milestones', JSON.stringify(this.result));
+            
 
             this.toastr.success('Tasks has been updated successfully');
             this.closeDialog();

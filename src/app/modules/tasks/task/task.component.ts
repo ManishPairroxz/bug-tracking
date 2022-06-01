@@ -13,39 +13,34 @@ export class TaskComponent implements OnInit, OnDestroy    {
 
     constructor(public route : ActivatedRoute)   {
         this.route.paramMap.subscribe((param : any) =>  {
-             
-             
             this.id = param['params']['id'];
-             
-
-             
-            let result : any = [];
-            let parsedData : any =  [];
-            let specificElementIndex: any;
-            
-            result = (localStorage.getItem('milestones'));
-            parsedData = JSON.parse(result);
-             
-
-            // specificElementIndex = parsedData.findIndex((x: any) => x['_id'] == this.id);
-            parsedData.forEach((element : any) => {
-                 
-                specificElementIndex    =    element.tasks.findIndex((x : any) => x[0]['_id'] == this.id);
-                 
-                 
-                this.tasksDetails   =   element.tasks[specificElementIndex];
-                 
-            });
-            //  
-
-
-    
-            
         })
     }
 
     ngOnInit(): void {
+        let result : any = [];
+        let parsedData : any =  [];
+        let specificElementIndex: any;
+        
+        result = (localStorage.getItem('milestones'));
+        parsedData = JSON.parse(result);
+        console.log(parsedData);
 
+        // specificElementIndex = parsedData.findIndex((x: any) => x['_id'] == this.id);
+        parsedData.forEach((element : any) => {
+            if(element.tasks.length > 0)    {
+                element.tasks.forEach((task : any) => {
+                    console.log(task[0]['_id']);
+                    if(task[0]['_id'] == this.id)  {
+                        console.log(task);
+                        this.tasksDetails.push(task);
+                    }
+                })
+            }
+            console.log(this.tasksDetails);
+            // specificElementIndex    =    element.tasks.findIndex((x : any) => x[0]['_id'] == this.id);
+            // this.tasksDetails   =   element.tasks[specificElementIndex];
+        });
 
     }
 

@@ -9,45 +9,53 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let  item of tasksDetails[0].bugs; let i = index;">
-                <th scope="row">{{item.title}}</th>
-                <td>{{item.assignee | titlecase}}</td>
-                
-                <td *ngIf="item.status == 'new'"><span
-                        [ngClass]="item.status == 'new' ? 'badge bg-secondary custom-badge' : ''">New</span>
-                </td>
-                <td *ngIf="item.status == 'assinged'"><span
-                        [ngClass]="item.status == 'assinged' ? 'badge bg-primary custom-badge' : ''">In
-                        Progress</span></td>
-                <td *ngIf="item.status == 'fixed'"><span
-                        [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark custom-badge' : ''">In
-                        Review</span>
-                </td>
+            <!-- {{tasksDetails[0][0] | json}} -->
+            <br>
+            <!-- ASSIGNEE ->{{tasksDetails[0][0]['_id']}} -->
+            <ng-container *ngFor="let  item of tasksDetails[0]; let i = index;">
+                <!-- ITEM -> {{item | json}} -->
+                <tr *ngFor="let item of item.bugs; let i = index;">
+                    <th scope="row">{{item.title}}</th>
+                    <td>{{item.assignee | titlecase}}</td>
 
-                <td *ngIf="item.status == 'reopenByClient'">
-                    <span [ngClass]="item.status == 'reopenByClient' ? 'badge bg-danger custom-badge reverify' : ''">
-                        Re-Verifying
-                    </span>
-                </td>
+                    <td *ngIf="item.status == 'new'"><span
+                            [ngClass]="item.status == 'new' ? 'badge bg-secondary custom-badge' : ''">New</span>
+                    </td>
+                    <td *ngIf="item.status == 'assinged'"><span
+                            [ngClass]="item.status == 'assinged' ? 'badge bg-primary custom-badge' : ''">In
+                            Progress</span></td>
+                    <td *ngIf="item.status == 'fixed'"><span
+                            [ngClass]="item.status == 'fixed' ? 'badge bg-warning text-dark custom-badge' : ''">In
+                            Review</span>
+                    </td>
 
-                <td *ngIf="item.status == 'reopen'"><span
-                        [ngClass]="item.status == 'reopen' ? 'badge bg-danger custom-badge' : ''">Bug
-                        Persists</span></td>
-                <td *ngIf="item.status == 'verified'">
-                    <span style="background-color : lightgreen !important;"
-                        [ngClass]="item.status == 'verified' ? 'badge bg-dark custom-badge' : '' ">Verified</span>
-                </td>
-                <td *ngIf="item.status == 'sendToClient'">
-                    <span style="background-color : #6632a8 !important;"
-                        [ngClass]="item.status == 'sendToClient' ? 'badge bg-dark custom-badge' : '' ">
-                        Sent to client
-                    </span>
-                </td>
-                <td *ngIf="item.status == 'closed'"><span
-                        [ngClass]="item.status == 'closed' ? 'badge bg-success  custom-badge' : ''">Done</span>
-                </td>
-                <td>{{item.priority | titlecase}}</td>
-            </tr>
+                    <td *ngIf="item.status == 'reopenByClient'">
+                        <span
+                            [ngClass]="item.status == 'reopenByClient' ? 'badge bg-danger custom-badge reverify' : ''">
+                            Re-Verifying
+                        </span>
+                    </td>
+
+                    <td *ngIf="item.status == 'reopen'"><span
+                            [ngClass]="item.status == 'reopen' ? 'badge bg-danger custom-badge' : ''">Bug
+                            Persists</span></td>
+                    <td *ngIf="item.status == 'verified'">
+                        <span style="background-color : lightgreen !important;"
+                            [ngClass]="item.status == 'verified' ? 'badge bg-dark custom-badge' : '' ">Verified</span>
+                    </td>
+                    <td *ngIf="item.status == 'sendToClient'">
+                        <span style="background-color : #6632a8 !important;"
+                            [ngClass]="item.status == 'sendToClient' ? 'badge bg-dark custom-badge' : '' ">
+                            Sent to client
+                        </span>
+                    </td>
+                    <td *ngIf="item.status == 'closed'"><span
+                            [ngClass]="item.status == 'closed' ? 'badge bg-success  custom-badge' : ''">Done</span>
+                    </td>
+                    <td>{{item.priority | titlecase}}</td>
+                </tr>
+
+            </ng-container>
         </tbody>
     </table>
 </div>
