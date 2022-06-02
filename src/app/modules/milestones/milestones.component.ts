@@ -56,7 +56,7 @@ export class MilestonesComponent implements OnInit, OnDestroy {
             status: new FormControl('', [Validators.required]),
             milestones: new FormControl('', [Validators.required]),
             startDate: new FormControl('', Validators.required),
-            endDate: new FormControl('', Validators.required)
+            endDate: new FormControl('', Validators.required),
         });
 
         this.editTasksForm = this.formBuilder.group({
@@ -167,7 +167,9 @@ export class MilestonesComponent implements OnInit, OnDestroy {
     open(content: any, name: any) {
         console.log(content);
         console.log(name);
+        
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+            
             this.closeResult = `Closed with: ${result}`;
 
         }, (reason) => {

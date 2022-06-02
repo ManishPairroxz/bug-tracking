@@ -239,7 +239,7 @@ export class BugsComponent implements OnInit, OnDestroy, AfterViewInit, OnChange
                 singleTask[specificElementIndex]['bugs']?.push(this.addBugForm.value);
 
             }
-            if(this.milestones[this.specifiElementIndex])   {
+            if(this.milestones[this.specifiElementIndex] && this.milestones[this.specifiElementIndex]['tasks'] && this.milestones[this.specifiElementIndex]['tasks'][specificElementIndex])   {
                 this.milestones[this.specifiElementIndex]['tasks'][specificElementIndex].bugs?.push(this.addBugForm.value);
 
             }

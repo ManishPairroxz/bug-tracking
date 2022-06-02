@@ -261,7 +261,12 @@
                             <select id="milestoneSelect" class="form-select" aria-placeholder="Milestone"
                                 formControlName="milestones" (change)="onSeeMilestone($event)">
                                 <option *ngFor="let item of milestones; let i = index;" [value]="item._id">
-                                    {{item.title}}
+                                    <ng-container *ngIf="item.title.length > 60;else normalTitle;">
+                                        {{item.title.slice(0,60)}}...
+                                    </ng-container>
+                                    <ng-template #normalTitle>
+                                        {{item.title}}
+                                    </ng-template>
                                 </option>
                             </select>
 
@@ -273,7 +278,12 @@
                                 formControlName="tasks" (change)="onSeeTasks($event)">
                                 <option value="" disabled>Please select Milestones first</option>
                                 <option *ngFor="let item of tasks; let i = index;" [value]="item._id">
-                                    {{item.title}}
+                                    <ng-container *ngIf="item.title.length > 60;else normalTitle;">
+                                        {{item.title.slice(0,60)}}...
+                                    </ng-container>
+                                    <ng-template #normalTitle>
+                                        {{item.title}}
+                                    </ng-template>
                                 </option>
                             </select>
 

@@ -42,6 +42,8 @@ export class TaskComponent implements OnInit, OnDestroy    {
             // this.tasksDetails   =   element.tasks[specificElementIndex];
         });
 
+        console.log(this.tasksDetails);
+
     }
 
     ngOnDestroy(): void {
